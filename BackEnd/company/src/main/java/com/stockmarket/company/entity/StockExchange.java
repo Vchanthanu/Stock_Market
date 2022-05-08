@@ -10,26 +10,25 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
 @Entity
-@Table(name = "company")
-public class Company {
-
+@Table(name = "stock_exchange")
+public class StockExchange {
 	@Id
+	@Column(name = "se_code")
+	private String code;
 	@NotBlank
-	@Column(name = "co_code")
-	public String code;
-	@NotBlank
-	@Column(name = "co_name")
-	public String name;
-	@NotBlank
-	@Column(name = "co_ceo")
-	public String ceo;
-	@Column(name = "co_turnover")
-	public int turnover;
-	@NotBlank
-	@Column(name = "co_website")
-	public String website;
-	@OneToMany(mappedBy = "company")
+	@Column(name = "se_name")
+	private String name;
+
+	@OneToMany(mappedBy = "stockExchange")
 	public List<StockPrice> stockPrice;
+
+	public String getSe_code() {
+		return code;
+	}
+
+	public void setSe_code(String code) {
+		this.code = code;
+	}
 
 	public String getCode() {
 		return code;
@@ -45,30 +44,6 @@ public class Company {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getCeo() {
-		return ceo;
-	}
-
-	public void setCeo(String ceo) {
-		this.ceo = ceo;
-	}
-
-	public int getTurnover() {
-		return turnover;
-	}
-
-	public void setTurnover(int turnover) {
-		this.turnover = turnover;
-	}
-
-	public String getWebsite() {
-		return website;
-	}
-
-	public void setWebsite(String website) {
-		this.website = website;
 	}
 
 	public List<StockPrice> getStockPrice() {
