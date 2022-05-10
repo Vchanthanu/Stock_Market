@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import com.stockmarket.company.CompanyApplication;
 import com.stockmarket.company.entity.Company;
-import com.stockmarket.company.entity.StockExchange;
 import com.stockmarket.company.repository.CompanyRepository;
 import com.stockmarket.company.repository.StockExchangeRepository;
 import com.stockmarket.company.service.CompanyService;
@@ -38,6 +37,11 @@ public class CompanyServiceImpl implements CompanyService {
 	@Override
 	public List<Company> getAllCompanies() {
 		return companyRepository.findAll();
+	}
+
+	@Override
+	public void deleteCompany(String companyCode) {
+		companyRepository.deleteById(companyCode);
 	}
 
 }
