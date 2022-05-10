@@ -8,30 +8,34 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "company_stock_exchange")
 public class StockPrice {
 
 	@EmbeddedId
-	CompanyStockExchange id;
+	CompanyStockExchangePk id;
 	@Column(name = "cse_stock_price")
 	private float stockPrice;
 
 	@ManyToOne
+	@JsonBackReference(value = "stockPriceCompany")
 	@MapsId("companyCode")
 	@JoinColumn(name = "cse_co_code")
 	public Company company;
 
 	@ManyToOne
+	@JsonBackReference(value = "stockPricestockExchange")
 	@MapsId("stockExchangeCode")
 	@JoinColumn(name = "cse_se_code")
 	private StockExchange stockExchange;
 
-	public CompanyStockExchange getId() {
+	public CompanyStockExchangePk getId() {
 		return id;
 	}
 
-	public void setId(CompanyStockExchange id) {
+	public void setId(CompanyStockExchangePk id) {
 		this.id = id;
 	}
 

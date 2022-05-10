@@ -2,6 +2,7 @@ package com.stockmarket.company.entity;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -28,7 +29,7 @@ public class Company {
 	@NotBlank
 	@Column(name = "co_website")
 	public String website;
-	@OneToMany(mappedBy = "company")
+	@OneToMany(mappedBy = "company",cascade = CascadeType.ALL)
 	public List<StockPrice> stockPrice;
 
 	public String getCode() {

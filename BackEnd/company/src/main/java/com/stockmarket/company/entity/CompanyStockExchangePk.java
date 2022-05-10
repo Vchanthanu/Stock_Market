@@ -1,13 +1,13 @@
 package com.stockmarket.company.entity;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
-public class CompanyStockExchange implements Serializable {
+public class CompanyStockExchangePk implements Serializable {
 
 	/**
 	 * 
@@ -18,7 +18,7 @@ public class CompanyStockExchange implements Serializable {
 	@Column(name = "cse_se_code")
 	private String stockExchangeCode;
 	@Column(name = "cse_price_date")
-	private LocalDateTime priceUpdatedDate;
+	private Date priceUpdatedDate;
 
 	public String getCompanyCode() {
 		return companyCode;
@@ -36,11 +36,11 @@ public class CompanyStockExchange implements Serializable {
 		this.stockExchangeCode = stockExchangeCode;
 	}
 
-	public LocalDateTime getPriceUpdatedDate() {
+	public Date getPriceUpdatedDate() {
 		return priceUpdatedDate;
 	}
 
-	public void setPriceUpdatedDate(LocalDateTime priceUpdatedDate) {
+	public void setPriceUpdatedDate(Date priceUpdatedDate) {
 		this.priceUpdatedDate = priceUpdatedDate;
 	}
 
