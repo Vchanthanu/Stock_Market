@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.stockmarket.company.CompanyApplication;
 import com.stockmarket.company.entity.Company;
+import com.stockmarket.company.mongo.model.CompanyDetails;
 import com.stockmarket.company.service.CompanyService;
 
 @RestController
@@ -28,7 +29,7 @@ public class CompanyController {
 	CompanyService companyService;
 
 	@GetMapping("/all")
-	public List<Company> getAllCompanies() {
+	public List<CompanyDetails> getAllCompanies() {
 		return companyService.getAllCompanies();
 	}
 
@@ -41,6 +42,8 @@ public class CompanyController {
 
 	@DeleteMapping("/delete/{companyCode}")
 	public void deleteCompany(@PathVariable String companyCode) {
+		logger.info("Inside deleteCompany method in CompanyController :companyCode{}" + companyCode);
 		companyService.deleteCompany(companyCode);
+		logger.info("End of deleteCompany method in CompanyController");
 	}
 }
