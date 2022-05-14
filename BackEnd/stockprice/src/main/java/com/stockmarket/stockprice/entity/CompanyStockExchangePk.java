@@ -1,4 +1,4 @@
-package com.stockmarket.company.entity;
+package com.stockmarket.stockprice.entity;
 
 import java.io.Serializable;
 import java.util.Date;

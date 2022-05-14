@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import com.stockmarket.company.CompanyApplication;
 import com.stockmarket.company.entity.Company;
+import com.stockmarket.company.exception.ApplicationServiceException;
+import com.stockmarket.company.exception.InvalidInputDataException;
 import com.stockmarket.company.repository.CompanyRepository;
 import com.stockmarket.company.repository.StockExchangeRepository;
 import com.stockmarket.company.service.CompanyService;
@@ -22,26 +24,54 @@ public class CompanyServiceImpl implements CompanyService {
 
 	@Autowired
 	StockExchangeRepository stockExchangeRepo;
+
 	@Override
 	public void registerCompany(Company company) {
 		logger.info("Inside registerCompany method in CompanyServiceImpl");
-		company.getStockPrice().forEach(stockPrice->
-		{stockPrice.getId().setPriceUpdatedDate(new Date());
-		stockPrice.setCompany(company);
-		stockPrice.setStockExchange(stockExchangeRepo.findById(stockPrice.getId().getStockExchangeCode()).get());
-		});
-		companyRepository.save(company);
+		try {
+			if (companyRepository.findById(company.getCode()).get() == null) {
+				company.getStockPrice().forEach(stockPrice -> {
+					if (stockPrice.getId() != null) {
+						stockPrice.getId().setPriceUpdatedDate(new Date());
+						stockPrice.setCompany(company);
+						stockPrice.setStockExchange(
+								stockExchangeRepo.findById(stockPrice.getId().getStockExchangeCode()).get());
+					}
+				});
+				companyRepository.save(company);
+			} else {
+				throw new InvalidInputDataException("Company Code already exists!!");
+			}
+		} catch (InvalidInputDataException ex) {
+			throw ex;
+		}
 
+		catch (Exception ex) {
+			logger.error("Exception in registerCompany method-{}", ex.getMessage());
+			throw new ApplicationServiceException("Oops Something unexpected happened.Please try again later ");
+		}
 	}
 
 	@Override
 	public List<Company> getAllCompanies() {
-		return companyRepository.findAll();
+		try {
+			logger.info("Inside getAllCompanies method in CompanyServiceImpl");
+			return companyRepository.findAll();
+		} catch (Exception ex) {
+			logger.error("Exception in getAllCompanies method" + ex.getMessage());
+			throw new ApplicationServiceException("Oops Something unexpected happened.Please try again later ");
+		}
 	}
 
 	@Override
 	public void deleteCompany(String companyCode) {
-		companyRepository.deleteById(companyCode);
+		try {
+			logger.info("Inside deleteCompany method in CompanyServiceImpl");
+			companyRepository.deleteById(companyCode);
+		} catch (Exception ex) {
+			logger.error("Exception in delete company method" + companyCode + ex.getMessage());
+			throw new ApplicationServiceException("Oops Something unexpected happened.Please try again later ");
+		}
 	}
 
 }

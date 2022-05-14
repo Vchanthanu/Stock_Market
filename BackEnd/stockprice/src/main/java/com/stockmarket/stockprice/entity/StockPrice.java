@@ -1,4 +1,4 @@
-package com.stockmarket.company.entity;
+package com.stockmarket.stockprice.entity;
 
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -17,7 +17,7 @@ public class StockPrice {
 
 	@EmbeddedId
 	CompanyStockExchangePk id;
-	@NotNull(message="stockPrice cannot be empty")
+	@NotNull(message = "stockPrice cannot be empty")
 	@Column(name = "cse_stock_price")
 	private float stockPrice;
 

@@ -1,8 +1,8 @@
-package com.stockmarket.company.repository;
+package com.stockmarket.stockprice.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.stockmarket.company.entity.Company;
+import com.stockmarket.stockprice.entity.Company;
 
 public interface CompanyRepository extends JpaRepository<Company, String> {
 
