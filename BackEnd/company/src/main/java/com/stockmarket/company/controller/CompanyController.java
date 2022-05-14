@@ -43,4 +43,11 @@ public class CompanyController {
 	public void deleteCompany(@PathVariable String companyCode) {
 		companyService.deleteCompany(companyCode);
 	}
+
+	@GetMapping("/getcompany/{companyCode}")
+	public Company getCompanyByCode(@PathVariable String companyCode) {
+		logger.info("Request received for getCompanyByCode, :: code:{}",companyCode);
+		return companyService.getCompanyByCode(companyCode);
+	}
+
 }

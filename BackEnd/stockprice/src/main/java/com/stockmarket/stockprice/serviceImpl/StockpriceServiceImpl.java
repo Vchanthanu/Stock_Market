@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.stockmarket.stockprice.StockpriceApplication;
+import com.stockmarket.stockprice.entity.StockExchange;
 import com.stockmarket.stockprice.entity.StockPrice;
 import com.stockmarket.stockprice.exception.ApplicationServiceException;
 import com.stockmarket.stockprice.repository.CompanyRepository;
@@ -42,6 +43,20 @@ public class StockpriceServiceImpl implements StockpriceService {
 			throw new ApplicationServiceException("Oops Something unexpected happened.Please try again later");
 		}
 
+	}
+
+	@Override
+	public List<StockExchange> getStockExchangeDetails() {
+		try {
+			logger.info("Inside getStockExchangeDetails method in StockpriceServiceImpl");
+			List<StockExchange> stockExchangeList= stockExchangeRepository.findAll();
+			logger.info("Stock Exchange Details :: {}",stockExchangeList.toString());
+			return stockExchangeList;
+		} catch (Exception ex) {
+			logger.error("Exception in getStockExchangeDetails method" + ex.getMessage());
+			throw new ApplicationServiceException("Oops Something unexpected happened.Please try again later");
+		}
+		
 	}
 
 }

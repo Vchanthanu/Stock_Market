@@ -74,4 +74,18 @@ public class CompanyServiceImpl implements CompanyService {
 		}
 	}
 
+	@Override
+	public Company getCompanyByCode(String companyCode) {
+
+		try {
+			logger.info("Inside getCompanyByCode method in CompanyServiceImpl");
+			Company company = companyRepository.findByCode(companyCode);
+			logger.info("Company Details :: {}", company.toString());
+			return company;
+		} catch (Exception ex) {
+			logger.error("Exception in getCompanyByCode method" + ex.getMessage());
+			throw new ApplicationServiceException("Oops Something unexpected happened.Please try again later");
+		}
+	}
+
 }
