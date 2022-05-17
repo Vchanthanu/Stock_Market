@@ -1,0 +1,28 @@
+<div class="container-fluid col-lg-4 col-md-6 col-sm-12 mt-5 pt-5 p-5 mb-5">
+    <div class="card border border-info rounded p-4 ">
+        <h2 class="text-center ">Login</h2>
+        <div class="alert alert-danger " *ngIf="!formValidation "> Invalid Username/Password</div>
+        <form [formGroup]="loginForm " (ngSubmit)="login() ">
+            <div class="form-row ">
+                <div class="form-group col-sm-12 col-lg-12 ">
+                    <label for="userName">Username</label>
+                    <input type="text" class="form-control " id="userName" placeholder="Enter Username" formControlName="username">
+                    <div class="text-danger" *ngIf="username.touched && !username.valid"><small> Username is required</small></div>
+                </div>
+            </div>
+            <div class="form-row ">
+                <div class="form-group col-sm-12 col-lg-12 ">
+                    <label for="inputPassword">Password</label>
+                    <input type="password" class="form-control " id="inputPassword " placeholder="Enter Password " formControlName="password">
+                    <div class="text-danger " *ngIf="password.touched && !password.valid "><small> Password is required</small></div>
+                </div>
+            </div>
+            <div class="form-row ">
+                <div class=" d-flex form-group col-sm-12 col-lg-12 ">
+                    <button class="btn color" id="login">Login</button>
+                    <div class="ml-auto ">New here? <a routerLink="/signup">Signup</a></div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
