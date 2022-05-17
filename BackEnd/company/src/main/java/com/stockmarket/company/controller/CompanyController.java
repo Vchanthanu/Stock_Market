@@ -2,6 +2,8 @@ package com.stockmarket.company.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,20 +27,27 @@ public class CompanyController {
 	@Autowired
 	CompanyService companyService;
 
-	
 	@GetMapping("/all")
 	public List<Company> getAllCompanies() {
 		return companyService.getAllCompanies();
 	}
+
 	@PostMapping("/register")
-	public void registerCompany(@RequestBody Company company) {
+	public void registerCompany(@RequestBody @Valid Company company) {
 		logger.info("Inside registerCompany method in CompanyController");
 		companyService.registerCompany(company);
 		logger.info("End of registerCompany method in CompanyController");
 	}
-	
+
 	@DeleteMapping("/delete/{companyCode}")
 	public void deleteCompany(@PathVariable String companyCode) {
 		companyService.deleteCompany(companyCode);
 	}
+
+	@GetMapping("/getcompany/{companyCode}")
+	public Company getCompanyByCode(@PathVariable String companyCode) {
+		logger.info("Request received for getCompanyByCode, :: code:{}",companyCode);
+		return companyService.getCompanyByCode(companyCode);
+	}
+
 }
