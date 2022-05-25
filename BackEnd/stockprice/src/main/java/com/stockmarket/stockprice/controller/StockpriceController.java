@@ -14,9 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.stockmarket.stockprice.StockpriceApplication;
-import com.stockmarket.stockprice.entity.StockExchange;
+
 import com.stockmarket.stockprice.entity.StockPrice;
 import com.stockmarket.stockprice.exception.InvalidInputDataException;
+import com.stockmarket.stockprice.mongo.model.StockExchange;
 import com.stockmarket.stockprice.service.StockpriceService;
 
 @RestController
@@ -36,10 +37,9 @@ public class StockpriceController {
 		logger.info("End of addStockPrice method in StockpriceController");
 	}
 
-	@GetMapping("/getstockdetails")
+	@GetMapping("/get/stockExchange")
 	public List<StockExchange> getStockExchangeDetails() {
 		logger.info("Request received for getStockExchangeDetails ");
-
 		try {
 			return stockpriceService.getStockExchangeDetails();
 		} catch (Exception e) {
