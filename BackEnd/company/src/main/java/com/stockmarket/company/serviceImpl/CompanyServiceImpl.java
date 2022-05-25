@@ -79,25 +79,7 @@ public class CompanyServiceImpl implements CompanyService {
 			if (!companies.isEmpty()) {
 				List<StockExchange> stockExchangeList = mongoStockExchangeRepository.findAll();
 				companies.stream().forEach(company -> {
-					if (StringUtils.isNotBlank(company.getCode())) {
-						List<StockPrice> stockPriceList = mongoStockPriceRepository
-								.findByCompanyCodeOrderByPriceUpdatedDateDesc((company.getCode()));
-						if (!stockPriceList.isEmpty()) {
-							List<StockPrice> latestStockPriceList = new ArrayList<>();
-							stockExchangeList.stream().forEach(stockExchange -> {
-								StockPrice latestStockPrice = stockPriceList.stream().filter(price -> price
-										.getStockExchange().getCode().equalsIgnoreCase(stockExchange.getCode()))
-										.findFirst().orElse(null);
-								if (latestStockPrice != null) {
-									latestStockPriceList.add(latestStockPrice);
-								}
-								company.setStockPrice(latestStockPriceList);
-
-							});
-
-						}
-
-					}
+					getCompanyStockPrice(stockExchangeList, company);
 				});
 				logger.info("End of  getAllCompanies method in CompanyServiceImpl");
 				return companies;
@@ -110,6 +92,28 @@ public class CompanyServiceImpl implements CompanyService {
 			throw new ApplicationServiceException("Oops Something unexpected happened.Please try again later ");
 		}
 
+	}
+
+	private void getCompanyStockPrice(List<StockExchange> stockExchangeList, CompanyDetails company) {
+		if (StringUtils.isNotBlank(company.getCode())) {
+			List<StockPrice> stockPriceList = mongoStockPriceRepository
+					.findByCompanyCodeOrderByPriceUpdatedDateDesc((company.getCode()));
+			if (!stockPriceList.isEmpty()) {
+				List<StockPrice> latestStockPriceList = new ArrayList<>();
+				stockExchangeList.stream().forEach(stockExchange -> {
+					StockPrice latestStockPrice = stockPriceList.stream().filter(price -> price
+							.getStockExchange().getCode().equalsIgnoreCase(stockExchange.getCode()))
+							.findFirst().orElse(null);
+					if (latestStockPrice != null) {
+						latestStockPriceList.add(latestStockPrice);
+					}
+					company.setStockPrice(latestStockPriceList);
+
+				});
+
+			}
+
+		}
 	}
 
 	@Override
@@ -125,11 +129,15 @@ public class CompanyServiceImpl implements CompanyService {
 	}
 
 	@Override
-	public Company getCompanyByCode(String companyCode) {
+	public CompanyDetails getCompanyByCode(String companyCode) {
 
 		try {
 			logger.info("Inside getCompanyByCode method in CompanyServiceImpl");
-			Company company = companyRepository.findByCode(companyCode);
+			CompanyDetails company = mongoCompanyRepository.findByCode(companyCode).get();
+			if (company != null) {
+				List<StockExchange> stockExchangeList = mongoStockExchangeRepository.findAll();
+				getCompanyStockPrice(stockExchangeList, company);
+			}
 			logger.info("Company Details :: {}", company.toString());
 			return company;
 		} catch (Exception ex) {

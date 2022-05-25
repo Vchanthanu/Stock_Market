@@ -13,6 +13,6 @@ public interface CompanyService {
 
 	void deleteCompany(String companyCode);
 	
-	Company getCompanyByCode(String companyCode);
+	CompanyDetails getCompanyByCode(String companyCode);
 
 }

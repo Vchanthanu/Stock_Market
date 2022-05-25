@@ -30,6 +30,7 @@ public class CompanyController {
 
 	@GetMapping("/all")
 	public List<CompanyDetails> getAllCompanies() {
+		logger.info("Inside registerCompany method in CompanyController");
 		return companyService.getAllCompanies();
 	}
 
@@ -47,8 +48,8 @@ public class CompanyController {
 		logger.info("End of deleteCompany method in CompanyController");
 	}
 
-	@GetMapping("/getcompany/{companyCode}")
-	public Company getCompanyByCode(@PathVariable String companyCode) {
+	@GetMapping("/get/{companyCode}")
+	public CompanyDetails getCompanyByCode(@PathVariable String companyCode) {
 		logger.info("Request received for getCompanyByCode, :: code:{}",companyCode);
 		return companyService.getCompanyByCode(companyCode);
 	}
