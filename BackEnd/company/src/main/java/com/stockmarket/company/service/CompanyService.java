@@ -12,5 +12,7 @@ public interface CompanyService {
 	List<CompanyDetails> getAllCompanies();
 
 	void deleteCompany(String companyCode);
+	
+	Company getCompanyByCode(String companyCode);
 
 }

@@ -1,0 +1,24 @@
+<nav class="navbar color navbar-dark navbar-expand-lg ">
+    <a class="navbar-brand" routerLink="">
+        <h4 class="title"><span class="text-light pl-5">Stock Market</span></h4>
+    </a>
+    <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#navbarToggler">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarToggler">
+        <ul class="navbar-nav ml-auto ">
+            <li class="nav-item ">
+                <a class="nav-link text-light p-0 pl-3" *ngIf="!isLogin()" routerLink="login">Login</a>
+            </li>
+            <li class="nav-item p-0" *ngIf=" isLogin() ">
+                <span class="nav-link text-light p-0 pl-3">{{getUser()}}</span>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link text-light p-0 pl-3" (click)="onSignOut() " href="" *ngIf="isLogin()">Logout</a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link text-light p-0 pl-3" *ngIf="!isLogin() " routerLink="signup">Signup</a>
+            </li>
+        </ul>
+    </div>
+</nav>

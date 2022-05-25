@@ -46,4 +46,11 @@ public class CompanyController {
 		companyService.deleteCompany(companyCode);
 		logger.info("End of deleteCompany method in CompanyController");
 	}
+
+	@GetMapping("/getcompany/{companyCode}")
+	public Company getCompanyByCode(@PathVariable String companyCode) {
+		logger.info("Request received for getCompanyByCode, :: code:{}",companyCode);
+		return companyService.getCompanyByCode(companyCode);
+	}
+
 }
