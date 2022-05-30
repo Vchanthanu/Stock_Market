@@ -6,15 +6,18 @@ import javax.persistence.Id;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Document(collection = "Company")
 public class CompanyDetails {
+	@JsonIgnore
 	@Id
 	private String id;
 	public String code;
 	public String name;
 	public String ceo;
 	public int turnover;
-	public List<StockPrice> stockPrice;
+	public List<StockPriceDetails> stockPrice;
 
 	public String getCode() {
 		return code;
@@ -48,11 +51,11 @@ public class CompanyDetails {
 		this.turnover = turnover;
 	}
 
-	public List<StockPrice> getStockPrice() {
+	public List<StockPriceDetails> getStockPrice() {
 		return stockPrice;
 	}
 
-	public void setStockPrice(List<StockPrice> stockPrice) {
+	public void setStockPrice(List<StockPriceDetails> stockPrice) {
 		this.stockPrice = stockPrice;
 	}
 

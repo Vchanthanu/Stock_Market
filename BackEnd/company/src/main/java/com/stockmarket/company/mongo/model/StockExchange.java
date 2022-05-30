@@ -4,8 +4,11 @@ import javax.persistence.Id;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Document(collection = "StockExchange")
 public class StockExchange {
+	@JsonIgnore
 	@Id
 	private String id;
 	private String code;

@@ -1,4 +1,4 @@
-package com.stockmarket.company.mongo.model;
+package com.stockmarket.stockprice.mongo.model;
 
 import java.util.Date;
 
@@ -6,11 +6,11 @@ import javax.persistence.Id;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.stockmarket.company.entity.StockExchange;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Document(collection = "StockPrice")
-public class StockPrice {
-
+public class StockPriceDetails {
+	@JsonIgnore
 	@Id
 	private String id;
 	public String companyCode;
