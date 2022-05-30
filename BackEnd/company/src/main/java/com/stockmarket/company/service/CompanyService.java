@@ -15,4 +15,6 @@ public interface CompanyService {
 	
 	CompanyDetails getCompanyByCode(String companyCode);
 
+	List<String> getMatchingCompanyCodes(String searchString);
+
 }

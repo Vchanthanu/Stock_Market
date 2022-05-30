@@ -1,7 +1,9 @@
 package com.stockmarket.stockprice.serviceImpl;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,14 +11,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.stockmarket.stockprice.StockpriceApplication;
+import com.stockmarket.stockprice.dto.StockPriceDto;
 import com.stockmarket.stockprice.entity.StockPrice;
 import com.stockmarket.stockprice.exception.ApplicationServiceException;
+import com.stockmarket.stockprice.exception.NoDataFoundException;
 import com.stockmarket.stockprice.mongo.model.StockExchange;
 import com.stockmarket.stockprice.mongo.repository.MongoStockExchangeRepository;
+import com.stockmarket.stockprice.mongo.repository.MongoStockPriceRepository;
+import com.stockmarket.stockprice.mongo.repository.MongoTemplateRepository;
 import com.stockmarket.stockprice.repository.CompanyRepository;
 import com.stockmarket.stockprice.repository.CompanyStockExchangeRepository;
 import com.stockmarket.stockprice.repository.StockExchangeRepository;
 import com.stockmarket.stockprice.service.StockpriceService;
+import com.stockmarket.stockprice.util.DateUtil;
 
 @Service
 public class StockpriceServiceImpl implements StockpriceService {
@@ -27,11 +34,18 @@ public class StockpriceServiceImpl implements StockpriceService {
 	CompanyRepository companyRepository;
 	@Autowired
 	StockExchangeRepository stockExchangeRepository;
-	
+
 	@Autowired
 	MongoStockExchangeRepository mongoStockExchangeRepository;
-	
-	
+
+	@Autowired
+	MongoStockPriceRepository mongoStockPriceRepository;
+
+	@Autowired
+	MongoTemplateRepository mongoTemplateRepository;
+
+	@Autowired
+	DateUtil dateUtil;
 
 	@Override
 	public void addStockPrice(List<StockPrice> priceList) {
@@ -63,6 +77,39 @@ public class StockpriceServiceImpl implements StockpriceService {
 			throw new ApplicationServiceException("Oops Something unexpected happened.Please try again later");
 		}
 
+	}
+
+	@Override
+	public StockPriceDto getStockPriceBasedOnDateRange(String companyCode, String stockExchangeCode, String fromDate,
+			String toDate) {
+		try {
+			logger.info("Inside getStockPriceBasedOnDateRange method in StockpriceServiceImpl");
+			List<com.stockmarket.stockprice.mongo.model.StockPriceDetails> stockPriceList = mongoTemplateRepository
+					.getStockPriceBasedOnDateRange(companyCode, stockExchangeCode, dateUtil.getDate(fromDate),
+							dateUtil.getDate(toDate));
+			if (!stockPriceList.isEmpty()) {
+				List<Float> priceList = stockPriceList.stream().map(price -> price.getStockPrice())
+						.collect(Collectors.toList());
+				if (!priceList.isEmpty()) {
+					Collections.sort(priceList);
+					StockPriceDto stockPriceDto = new StockPriceDto();
+					stockPriceDto.setMin(priceList.get(0));
+					stockPriceDto.setMax(priceList.get(priceList.size() - 1));
+					stockPriceDto
+							.setAverage((float) priceList.stream().mapToDouble(price -> price).average().orElse(0.0));
+					stockPriceDto.setPriceList(priceList);
+					return stockPriceDto;
+
+				}
+			} else {
+				throw new NoDataFoundException(
+						"No Data available for the selected company for the selected date range");
+			}
+		} catch (Exception ex) {
+			logger.error("Exception in getStockExchangeDetails method" + ex.getMessage());
+			throw new ApplicationServiceException("Oops Something unexpected happened.Please try again later");
+		}
+		return null;
 	}
 
 }

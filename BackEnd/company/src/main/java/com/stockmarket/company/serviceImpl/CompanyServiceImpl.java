@@ -17,7 +17,7 @@ import com.stockmarket.company.exception.InvalidInputDataException;
 import com.stockmarket.company.exception.NoDataFoundException;
 import com.stockmarket.company.mongo.model.CompanyDetails;
 import com.stockmarket.company.mongo.model.StockExchange;
-import com.stockmarket.company.mongo.model.StockPrice;
+import com.stockmarket.company.mongo.model.StockPriceDetails;
 import com.stockmarket.company.mongo.repository.MongoCompanyRepository;
 import com.stockmarket.company.mongo.repository.MongoStockExchangeRepository;
 import com.stockmarket.company.mongo.repository.MongoStockPriceRepository;
@@ -96,13 +96,13 @@ public class CompanyServiceImpl implements CompanyService {
 
 	private void getCompanyStockPrice(List<StockExchange> stockExchangeList, CompanyDetails company) {
 		if (StringUtils.isNotBlank(company.getCode())) {
-			List<StockPrice> stockPriceList = mongoStockPriceRepository
+			List<StockPriceDetails> stockPriceList = mongoStockPriceRepository
 					.findByCompanyCodeOrderByPriceUpdatedDateDesc((company.getCode()));
 			if (!stockPriceList.isEmpty()) {
-				List<StockPrice> latestStockPriceList = new ArrayList<>();
+				List<StockPriceDetails> latestStockPriceList = new ArrayList<>();
 				stockExchangeList.stream().forEach(stockExchange -> {
-					StockPrice latestStockPrice = stockPriceList.stream().filter(price -> price
-							.getStockExchange().getCode().equalsIgnoreCase(stockExchange.getCode()))
+					StockPriceDetails latestStockPrice = stockPriceList.stream().filter(
+							price -> price.getStockExchange().getCode().equalsIgnoreCase(stockExchange.getCode()))
 							.findFirst().orElse(null);
 					if (latestStockPrice != null) {
 						latestStockPriceList.add(latestStockPrice);
@@ -142,6 +142,22 @@ public class CompanyServiceImpl implements CompanyService {
 			return company;
 		} catch (Exception ex) {
 			logger.error("Exception in getCompanyByCode method" + ex.getMessage());
+			throw new ApplicationServiceException("Oops Something unexpected happened.Please try again later");
+		}
+	}
+
+	@Override
+	public List<String> getMatchingCompanyCodes(String searchString) {
+		try {
+			logger.info("Inside getMatchingCompanyCodes method in CompanyServiceImpl");
+			List<String> searchList = mongoCompanyRepository.findByCodeLike(searchString);
+			if (!searchList.isEmpty()) {
+				return searchList;
+			} else {
+				throw new NoDataFoundException("No Data available for the corresponding search");
+			}
+		} catch (Exception ex) {
+			logger.error("Exception in getMatchingCompanyCodes method" + ex.getMessage());
 			throw new ApplicationServiceException("Oops Something unexpected happened.Please try again later");
 		}
 	}

@@ -22,14 +22,6 @@ public class StockExchange {
 	@OneToMany(mappedBy = "stockExchange")
 	public List<StockPrice> stockPrice;
 
-	public String getSe_code() {
-		return code;
-	}
-
-	public void setSe_code(String code) {
-		this.code = code;
-	}
-
 	public String getCode() {
 		return code;
 	}

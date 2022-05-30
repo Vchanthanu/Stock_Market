@@ -53,5 +53,11 @@ public class CompanyController {
 		logger.info("Request received for getCompanyByCode, :: code:{}",companyCode);
 		return companyService.getCompanyByCode(companyCode);
 	}
+	
+	@GetMapping("/search/{searchString}")
+	public List<String> getMatchingCompanyCodes(@PathVariable String searchString) {
+		logger.info("Request received for getMatchingCompanyCodes, :: searchString:{}",searchString);
+		return companyService.getMatchingCompanyCodes(searchString);
+	}
 
 }
