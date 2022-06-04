@@ -10,22 +10,29 @@
             <form [formGroup]="signupForm">
                 <div class="form-row">
                     <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                        <label for="userName">Username<span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="userName" formControlName="userName" placeholder="Enter User Name">
-                        <small *ngIf="(userName.invalid && (userName.touched || userName.dirty) )&& userName.errors.required" class="text-danger">Username is required.</small>
+                        <label for="name">Full Name<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="name" formControlName="name"
+                            placeholder="Enter Name">
+                        <small
+                            *ngIf="(name.invalid && (name.touched || name.dirty) )&& name.errors.required"
+                            class="text-danger">Name is required.</small>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-sm-12">
                         <div class="form-group">
                             <label for="mobileNumber">Mobile Number<span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" formControlName="mobileNumber" id="mobileNumber" placeholder="Enter Mobile Number" required>
-                            <div class="text-danger " *ngIf="mobileNumber.invalid &&(mobileNumber.touched||mobileNumber.dirty)">
-                                <small class="text-danger" *ngIf="mobileNumber.errors.required">Contact Number is required
-                                                </small>
-                                <small class="text-danger" *ngIf="mobileNumber.errors.pattern">Contact Number can contain only
-                                                    number
-                                                </small>
+                            <input type="text" class="form-control" formControlName="mobileNumber" id="mobileNumber"
+                                placeholder="Enter Mobile Number" required>
+                            <div class="text-danger "
+                                *ngIf="mobileNumber.invalid &&(mobileNumber.touched||mobileNumber.dirty)">
+                                <small class="text-danger" *ngIf="mobileNumber.errors.required">Contact Number is
+                                    required
+                                </small>
+                                <small class="text-danger" *ngIf="mobileNumber.errors.pattern">Contact Number can
+                                    contain only
+                                    number
+                                </small>
                             </div>
 
                         </div>
@@ -33,13 +40,15 @@
                     <div class="col-lg-6 col-md-6 col-sm-12">
                         <div class="form-group">
                             <label for="email">Email<span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" formControlName="email" id="email" placeholder="Enter Email Address" required>
+                            <input type="text" class="form-control" formControlName="email" id="email"
+                                placeholder="Enter Email Address" required>
                             <div class="text-danger " *ngIf="email.invalid &&(email.touched||email.dirty)">
                                 <small class="text-danger" *ngIf="email.errors.required">Email is required
-                                                </small>
-                                <small class="text-danger" *ngIf="email.errors.pattern">Email should be in correct format i.e("name@gmail.com")
-                                                
-                                                </small>
+                                </small>
+                                <small class="text-danger" *ngIf="email.errors.pattern">Email should be in correct
+                                    format i.e("name@gmail.com")
+
+                                </small>
                             </div>
                         </div>
                     </div>
@@ -48,17 +57,19 @@
                     <div class="col-lg-6 col-md-6 col-sm-12">
                         <div class="form-group">
                             <label for="password">Password<span class="text-danger">*</span></label>
-                            <input type="password" class="form-control" id="password" formControlName="password" placeholder="Enter Password" required>
+                            <input type="password" class="form-control" id="password" formControlName="password"
+                                placeholder="Enter Password" required>
                             <div class="text-danger " *ngIf="password.invalid &&(password.touched||password.dirty)">
                                 <small class="text-danger" *ngIf="password.errors.required">Password is required
-                                            </small>
+                                </small>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="form-row col-sm-12 col-lg-12 mb-5">
                     <div class=" form-group mx-auto ">
-                        <button type="submit" class="btn color text-light " (click)=onSubmit() [disabled]="!(signupForm.valid && !isConfirmPasswordValid())">Signup</button>
+                        <button type="submit" class="btn color text-light " (click)=onSubmit()
+                            [disabled]="!(signupForm.valid)">Signup</button>
                     </div>
                 </div>
             </form>

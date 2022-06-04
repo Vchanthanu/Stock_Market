@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.loginForm = this.formbuilder.group({
-      username: ['', [
+      emailId: ['', [
         Validators.required
       ]],
       password: ['', [
@@ -30,14 +30,14 @@ export class LoginComponent implements OnInit {
     })
   }
 
-  get username() { return this.loginForm.get('username'); }
+  get emailId() { return this.loginForm.get('emailId'); }
   get password() { return this.loginForm.get('password'); }
 
   login() {
     if (this.loginForm.valid) {
-      this.authenticationService.authenticate(this.username.value, this.password.value).subscribe((data: any) => {
+      this.authenticationService.authenticate(this.emailId.value, this.password.value).subscribe((data: any) => {
         this.formValidation = true;
-        this.userAuthService.setUser(this.username.value);
+        this.userAuthService.setUser(this.emailId.value);
         this.authenticationService.setToken(data.token);
         this.userAuthService.setRole(data.role);
         this.userAuthService.setLog(true);
@@ -51,7 +51,7 @@ export class LoginComponent implements OnInit {
         (error: any) => {
           this.formValidation = false;
           if (error.status == 401) {
-            this.error = "Invalid Username/Password";
+            this.error = "Invalid email Id/Password";
           }
         });
     } else {

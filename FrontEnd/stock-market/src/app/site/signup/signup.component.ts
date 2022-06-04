@@ -11,26 +11,24 @@ import { AuthenticationService } from 'src/app/service/authentication.service';
   styleUrls: ['./signup.component.css']
 })
 export class SignupComponent implements OnInit {
-  signupForm : FormGroup  ;
+  signupForm :any  ;
   user!: User;
   role: Role | undefined;
   error:string='';
   loader: boolean= false;
   constructor(private authenticationService: AuthenticationService,private router:Router) {
-    this.signupForm = new FormGroup({
-      userName: new FormControl(null, [Validators.required]),
-      email: new FormControl(null, [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$')]),
-      mobileNumber: new FormControl(null, [Validators.required, Validators.pattern('^[0-9+]*'), Validators.maxLength(13)]),
-      password: new FormControl(null, [Validators.required]),
-      confirmPassword: new FormControl(null, [Validators.required]),
-    });
    }
 
   ngOnInit() {
-
+    this.signupForm = new FormGroup({
+      name: new FormControl(null, [Validators.required]),
+      email: new FormControl(null, [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$')]),
+      mobileNumber: new FormControl(null, [Validators.required, Validators.pattern('^[0-9+]*'), Validators.maxLength(13)]),
+      password: new FormControl(null, [Validators.required]),
+    });
   }
 
-  get userName() { return this.signupForm.get('userName'); }
+  get name() { return this.signupForm.get('name'); }
   get email() { return this.signupForm.get('email'); }
   get mobileNumber() { return this.signupForm.get('mobileNumber'); }
   get confirmPassword() { return this.signupForm.get('confirmPassword'); }

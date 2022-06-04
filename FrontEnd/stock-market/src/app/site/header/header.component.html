@@ -10,7 +10,7 @@
             <li class="nav-item ">
                 <a class="nav-link text-light p-0 pl-3" *ngIf="!isLogin()" routerLink="login">Login</a>
             </li>
-            <li class="nav-item p-0" *ngIf=" isLogin() ">
+            <li class="nav-item p-0" *ngIf="isLogin() ">
                 <span class="nav-link text-light p-0 pl-3">{{getUser()}}</span>
             </li>
             <li class="nav-item ">
