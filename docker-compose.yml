@@ -1,0 +1,17 @@
+version: '3'
+services:
+  company:
+    image: company
+    build: BackEnd/company.
+    ports:
+        - 8090:8090
+  
+  stock_price:
+    image: stock_price
+    build: BackEnd/stockprice.
+    ports:
+        - 8091:8091
+        
+  
+
+  
