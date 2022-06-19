@@ -11,6 +11,9 @@ import { LoginComponent } from './site/login/login.component';
 import { SignupComponent } from './site/signup/signup.component';
 import { AgGridModule } from 'ag-grid-angular';
 import { SearchCompanyComponent } from './company/search-company/search-company.component';
+import { AddCompanyComponent } from './company/add-company/add-company.component';
+import { CellLinkComponent } from './common/cell-link/cell-link.component';
+import { DetailCompanyComponent } from './company/detail-company/detail-company.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +21,10 @@ import { SearchCompanyComponent } from './company/search-company/search-company.
     HeaderComponent,
     LoginComponent,
     SignupComponent,
-    SearchCompanyComponent
+    SearchCompanyComponent,
+    AddCompanyComponent,
+    CellLinkComponent,
+    DetailCompanyComponent
   ],
   imports: [
     BrowserModule,
