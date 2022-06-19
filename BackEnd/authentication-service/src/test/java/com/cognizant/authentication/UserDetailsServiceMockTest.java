@@ -14,7 +14,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import com.cognizant.authentication.model.Role;
 import com.cognizant.authentication.model.User;
 import com.cognizant.authentication.repository.UserRepository;
 import com.cognizant.authentication.service.AppUserDetailsService;
@@ -30,7 +29,7 @@ public class UserDetailsServiceMockTest {
 //	@Test
 	public void mockTestLoadUserByUsername() {
 		UserRepository repository = Mockito.mock(UserRepository.class);
-		when(repository.findByUserName("1")).thenReturn(createUser());
+		when(repository.findByEmail("1")).thenReturn(createUser());
 		UserDetailsService service = new AppUserDetailsService(repository);
 		UserDetails user = service.loadUserByUsername("1");
 		String expected = "$2a$10$R/lZJuT9skteNmAku9Y7aeutxbOKstD5xE5bHOf74M2PHZipyt3yK";
@@ -40,7 +39,7 @@ public class UserDetailsServiceMockTest {
 //	@Test
 	public void mockTestLoadByUserNameWithUserNull() {
 		UserRepository repository = Mockito.mock(UserRepository.class);
-		when(repository.findByUserName("user")).thenReturn(null);
+		when(repository.findByEmail("user")).thenReturn(null);
 		UserDetailsService service = new AppUserDetailsService(repository);
 		try {
 			UserDetails user = service.loadUserByUsername("usr1");
@@ -55,10 +54,6 @@ public class UserDetailsServiceMockTest {
 
 	private User createUser() {
 		User user = new User();
-		Role role =new Role();
-		role.setId(1);
-		role.setType("ADMIN");
-		user.setRole(role);
 		user.setUserName("1");
 		user.setPassword("$2a$10$R/lZJuT9skteNmAku9Y7aeutxbOKstD5xE5bHOf74M2PHZipyt3yK");
 		user.setEmail("admin@gmail.com");

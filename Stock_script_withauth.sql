@@ -16,32 +16,7 @@ DROP SCHEMA IF EXISTS `stockmarket` ;
 -- Schema stockmarket
 -- -----------------------------------------------------
 CREATE SCHEMA IF NOT EXISTS `stockmarket` DEFAULT CHARACTER SET utf8 ;
--- -----------------------------------------------------
--- Schema stockmarket
--- -----------------------------------------------------
-DROP SCHEMA IF EXISTS `stockmarket` ;
-
--- -----------------------------------------------------
--- Schema stockmarket
--- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `stockmarket` DEFAULT CHARACTER SET utf8 ;
 USE `stockmarket` ;
-
--- -----------------------------------------------------
--- Table `stockmarket`.`role`
--- -----------------------------------------------------
--- -----------------------------------------------------
--- Table `stockmarket`.`role`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `stockmarket`.`role` ;
-
-CREATE TABLE IF NOT EXISTS `stockmarket`.`role` (
-  `ro_id` INT NOT NULL,
-  `ro_type` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`ro_id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb3;
-
 
 -- -----------------------------------------------------
 -- Table `stockmarket`.`user`
@@ -49,20 +24,14 @@ DEFAULT CHARACTER SET = utf8mb3;
 DROP TABLE IF EXISTS `stockmarket`.`user` ;
 
 CREATE TABLE IF NOT EXISTS `stockmarket`.`user` (
-  `us_id` BIGINT NOT NULL Default(1),
+  `us_id` BIGINT NOT NULL  AUTO_INCREMENT,
   `us_name` VARCHAR(45) NOT NULL,
   `us_password` VARCHAR(100) NOT NULL,
   `us_mobile_number` VARCHAR(45) NULL DEFAULT NULL,
-  `us_ro_id` INT NOT NULL,
   `us_email` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`us_id`, `us_ro_id`),
-  INDEX `fk_user_role_idx` (`us_ro_id` ASC) VISIBLE,
-  CONSTRAINT `fk_user_role`
-    FOREIGN KEY (`us_ro_id`)
-    REFERENCES `stockmarket`.`role` (`ro_id`))
+   PRIMARY KEY (`us_id`),
+   UNIQUE INDEX `us_email_UNIQUE` (`us_email` ASC) VISIBLE)
 ENGINE = InnoDB;
-
-USE `stockmarket` ;
 
 -- -----------------------------------------------------
 -- Table `stockmarket`.`company`
