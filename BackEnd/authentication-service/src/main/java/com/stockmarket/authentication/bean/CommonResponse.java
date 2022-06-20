@@ -1,4 +1,4 @@
-package com.cognizant.authentication.bean;
+package com.stockmarket.authentication.bean;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

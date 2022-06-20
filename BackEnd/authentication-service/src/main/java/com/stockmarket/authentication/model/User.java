@@ -1,4 +1,4 @@
-package com.cognizant.authentication.model;
+package com.stockmarket.authentication.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

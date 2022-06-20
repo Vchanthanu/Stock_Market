@@ -1,11 +1,11 @@
-package com.cognizant.authentication.security;
+package com.stockmarket.authentication.security;
 
 import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.cognizant.authentication.model.User;
+import com.stockmarket.authentication.model.User;
 
 
 public class AppUser implements UserDetails {

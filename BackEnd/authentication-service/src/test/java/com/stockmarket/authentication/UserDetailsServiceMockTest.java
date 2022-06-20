@@ -1,4 +1,4 @@
-package com.cognizant.authentication;
+package com.stockmarket.authentication;
 
 //import static org.junit.Assert.assertEquals;
 //import static org.junit.Assert.assertFalse;
@@ -14,9 +14,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import com.cognizant.authentication.model.User;
-import com.cognizant.authentication.repository.UserRepository;
-import com.cognizant.authentication.service.AppUserDetailsService;
+import com.stockmarket.authentication.model.User;
+import com.stockmarket.authentication.repository.UserRepository;
+import com.stockmarket.authentication.service.AppUserDetailsService;
 
 /**
  * @author 805831

@@ -1,4 +1,4 @@
-package com.cognizant.authentication.controller;
+package com.stockmarket.authentication.controller;
 
 import java.util.Base64;
 import java.util.Date;
@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cognizant.authentication.bean.CommonResponse;
-import com.cognizant.authentication.exception.UserAlreadyExistsException;
-import com.cognizant.authentication.model.User;
-import com.cognizant.authentication.service.AppUserDetailsService;
+import com.stockmarket.authentication.bean.CommonResponse;
+import com.stockmarket.authentication.exception.UserAlreadyExistsException;
+import com.stockmarket.authentication.model.User;
+import com.stockmarket.authentication.service.AppUserDetailsService;
 
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;

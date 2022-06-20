@@ -1,4 +1,4 @@
-package com.cognizant.authentication.service;
+package com.stockmarket.authentication.service;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -13,10 +13,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.cognizant.authentication.exception.UserAlreadyExistsException;
-import com.cognizant.authentication.model.User;
-import com.cognizant.authentication.repository.UserRepository;
-import com.cognizant.authentication.security.AppUser;
+import com.stockmarket.authentication.exception.UserAlreadyExistsException;
+import com.stockmarket.authentication.model.User;
+import com.stockmarket.authentication.repository.UserRepository;
+import com.stockmarket.authentication.security.AppUser;
 
 
 @Service

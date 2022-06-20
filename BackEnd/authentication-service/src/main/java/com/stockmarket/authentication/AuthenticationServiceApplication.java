@@ -1,4 +1,4 @@
-package com.cognizant.authentication;
+package com.stockmarket.authentication;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
