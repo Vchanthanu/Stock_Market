@@ -19,7 +19,7 @@ public class StockMarketApiGateway {
 	public RouteLocator gatewayRoutes(RouteLocatorBuilder builder) {
 		return builder.routes()
 				.route(r -> r.path("/api/v1.0/market/company/**").uri("http://localhost:8090/"))
-			//	.route(r -> r.path("/api/v1.0/market/authentication/**").uri("http://localhost:8081"))
+				.route(r -> r.path("/api/v1.0/market/authentication/**").uri("http://localhost:8092"))
 				.route(r -> r.path("/api/v1.0/market/stock/**").uri("http://localhost:8091/"))
 				.build();
 	} 

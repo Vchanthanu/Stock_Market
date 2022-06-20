@@ -1,8 +1,9 @@
-package com.cognizant.authentication.model;
+package com.stockmarket.authentication.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -18,8 +19,9 @@ import org.hibernate.annotations.GenericGenerator;
 public class User {
 	
 	@Id
-	@GenericGenerator(name="kaugen" , strategy="increment")
-	@GeneratedValue(generator="kaugen")
+	@GeneratedValue(strategy =  GenerationType.IDENTITY)
+//	@GenericGenerator(name="kaugen" , strategy="increment")
+//	@GeneratedValue(generator="kaugen")
 	@Column(name = "us_id")
 	private long id;
 	
@@ -40,9 +42,6 @@ public class User {
 	@NotNull
 	@Column(name = "us_mobile_number")
 	private String mobileNumber;
-	@ManyToOne
-	@JoinColumn(name="us_ro_id")
-	private Role role;
 	
 	public long getId() {
 		return id;
@@ -74,18 +73,6 @@ public class User {
 	public void setMobileNumber(String mobileNumber) {
 		this.mobileNumber = mobileNumber;
 	}
-	public Role getRole() {
-		return role;
-	}
-	public void setRole(Role role) {
-		this.role = role;
-	}
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", userName=" + userName + ", password=" + password + ", email=" + email
-				+ ", mobileNumber=" + mobileNumber + ", role=" + role + "]";
-	}
-	
 		
 
 }

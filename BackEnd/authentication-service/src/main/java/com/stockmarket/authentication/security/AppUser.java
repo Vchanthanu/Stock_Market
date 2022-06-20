@@ -1,21 +1,19 @@
-package com.cognizant.authentication.security;
+package com.stockmarket.authentication.security;
 
 import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.cognizant.authentication.model.User;
+import com.stockmarket.authentication.model.User;
 
 
 public class AppUser implements UserDetails {
 
 	private User user;
-	private  String role;
 
 	public AppUser(User user) {
 		this.user = user;
-		this.role =user.getRole().getType();
 	}
 	public User getUser() {
 		return user;
@@ -25,12 +23,6 @@ public class AppUser implements UserDetails {
 		this.user = user;
 	}
 
-	public String getRole() {
-		return role;
-	}
-	public void setRole(String role) {
-		this.role = role;
-	}
 	@Override
 	public String getPassword() {
 		return user.getPassword();

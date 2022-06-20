@@ -1,4 +1,4 @@
-package com.cognizant.authentication.security;
+package com.stockmarket.authentication.security;
 
 import java.io.IOException;
 import java.util.ArrayList;

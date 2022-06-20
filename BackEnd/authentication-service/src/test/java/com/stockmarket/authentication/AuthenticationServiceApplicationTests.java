@@ -1,4 +1,4 @@
-package com.cognizant.authentication;
+package com.stockmarket.authentication;
 
 //import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -11,9 +11,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import com.cognizant.authentication.controller.UserController;
-import com.cognizant.authentication.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.stockmarket.authentication.controller.UserController;
+import com.stockmarket.authentication.model.User;
 /**
  * @author 805831
  *

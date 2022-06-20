@@ -1,4 +1,4 @@
-package com.cognizant.authentication.service;
+package com.stockmarket.authentication.service;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -13,12 +13,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.cognizant.authentication.exception.UserAlreadyExistsException;
-import com.cognizant.authentication.model.Role;
-import com.cognizant.authentication.model.User;
-import com.cognizant.authentication.repository.RoleRepository;
-import com.cognizant.authentication.repository.UserRepository;
-import com.cognizant.authentication.security.AppUser;
+import com.stockmarket.authentication.exception.UserAlreadyExistsException;
+import com.stockmarket.authentication.model.User;
+import com.stockmarket.authentication.repository.UserRepository;
+import com.stockmarket.authentication.security.AppUser;
 
 
 @Service
@@ -26,8 +24,6 @@ public class AppUserDetailsService implements UserDetailsService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AppUserDetailsService.class);
 	@Autowired
 	private UserRepository userRepository;
-	@Autowired
-	private RoleRepository roleRepository;
 
 	public AppUserDetailsService(UserRepository userRepository) {
 		super();
@@ -35,8 +31,8 @@ public class AppUserDetailsService implements UserDetailsService {
 	}
 
 	@Override
-	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-		User user = userRepository.findByUserName(userName);
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+		User user = userRepository.findByEmail(email);
 		LOGGER.info("Inside Service");
 		if (user == null) {
 			throw new UsernameNotFoundException("Username is not found");
@@ -48,11 +44,9 @@ public class AppUserDetailsService implements UserDetailsService {
 
 	@Transactional
 	public void addUser(@Valid User user) throws UserAlreadyExistsException {
-		User users = userRepository.findByUserName(user.getUserName());
+		User users = userRepository.findByEmail(user.getEmail());
 		if (users == null) {
-			user.setPassword(passwordEncoder().encode(user.getPassword()));
-			Role role = roleRepository.findById(2).get();
-			user.setRole(role);
+//			user.setPassword(passwordEncoder().encode(user.getPassword()));
 			userRepository.save(user);
 		} else {
 			throw new UserAlreadyExistsException("User Already Exists");
@@ -60,18 +54,11 @@ public class AppUserDetailsService implements UserDetailsService {
 	}
 
 	@Transactional
-	public User findByUserName(String username) {
-		return userRepository.findByUserName(username);
+	public User findByEmail(String email) {
+		return userRepository.findByEmail(email);
 	}
 
 
-	@Transactional
-	public void modifyUser(User user) {
-		Role role = roleRepository.findById(2).get();
-		user.setRole(role);
-		userRepository.save(user);
-	}
-	
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
