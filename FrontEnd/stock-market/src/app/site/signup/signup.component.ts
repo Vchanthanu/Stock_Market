@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Role } from 'src/app/model/role';
 import { User } from 'src/app/model/user';
 import { AuthenticationService } from 'src/app/service/authentication.service';
 
@@ -13,7 +12,6 @@ import { AuthenticationService } from 'src/app/service/authentication.service';
 export class SignupComponent implements OnInit {
   signupForm :any  ;
   user!: User;
-  role: Role | undefined;
   error:string='';
   loader: boolean= false;
   constructor(private authenticationService: AuthenticationService,private router:Router) {
@@ -21,14 +19,14 @@ export class SignupComponent implements OnInit {
 
   ngOnInit() {
     this.signupForm = new FormGroup({
-      name: new FormControl(null, [Validators.required]),
+      userName: new FormControl(null, [Validators.required]),
       email: new FormControl(null, [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$')]),
       mobileNumber: new FormControl(null, [Validators.required, Validators.pattern('^[0-9+]*'), Validators.maxLength(13)]),
       password: new FormControl(null, [Validators.required]),
     });
   }
 
-  get name() { return this.signupForm.get('name'); }
+  get userName() { return this.signupForm.get('userName'); }
   get email() { return this.signupForm.get('email'); }
   get mobileNumber() { return this.signupForm.get('mobileNumber'); }
   get confirmPassword() { return this.signupForm.get('confirmPassword'); }
@@ -37,10 +35,15 @@ export class SignupComponent implements OnInit {
 
   onSubmit() {
     this.user = this.signupForm.value;
+    console.log(this.user)
     this.loader=true;
     this.authenticationService.addUser(this.user).subscribe((data:any) => {
       this.loader=false;
+      if(data.status){
       this.router.navigate(['login']);
+      }else{
+        this.error = data.message;
+      }
     },
     (responseError:any) => {
         this.error = responseError.error.message;

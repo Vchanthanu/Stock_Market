@@ -10,21 +10,20 @@ import { UserAuthService } from './user-auth.service';
 })
 export class AuthenticationService {
   loggedIn: boolean | undefined;
-  role: string | undefined;
   user: string | undefined;
   token: string | undefined;
-  private authenticationApiUrl = environment.baseUrl + '/authentication-service';
+  private authenticationApiUrl = environment.baseUrl + 'authentication/user';
   constructor(private httpClient: HttpClient, private userAuthService: UserAuthService) { }
 
   authenticate(user: string, password: string): Observable<any> {
     let credentials = btoa(user + ':' + password);
     let headers = new HttpHeaders();
     headers = headers.set('Authorization', 'Basic ' + credentials);
-    return this.httpClient.get(this.authenticationApiUrl + '/authenticate', { headers });
+    return this.httpClient.get(this.authenticationApiUrl + '/login', { headers });
   }
 
   addUser(user: User): Observable<void> {
-    return this.httpClient.post<void>(this.authenticationApiUrl + '/users', user);
+    return this.httpClient.post<void>(this.authenticationApiUrl + '/signup', user);
   }
 
   modifyUser(user: User) {

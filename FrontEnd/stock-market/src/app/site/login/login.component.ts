@@ -39,14 +39,8 @@ export class LoginComponent implements OnInit {
         this.formValidation = true;
         this.userAuthService.setUser(this.emailId.value);
         this.authenticationService.setToken(data.token);
-        this.userAuthService.setRole(data.role);
         this.userAuthService.setLog(true);
-        if (data.role == "ADMIN") {
-          this.router.navigate(["admin"]);
-        } else {
-          this.router.navigate(["user"]);
-        }
-
+          this.router.navigate(["company"]);
       },
         (error: any) => {
           this.formValidation = false;
@@ -55,7 +49,7 @@ export class LoginComponent implements OnInit {
           }
         });
     } else {
-
+      this.error="Both fields are required"
     }
   }
 
