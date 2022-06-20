@@ -33,7 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity.cors();
 		httpSecurity.csrf().disable().httpBasic().and().authorizeRequests()
-		.antMatchers("/users").anonymous()
+		.antMatchers("/api/v1.0/market/authentication/user/**").anonymous()
           .anyRequest().authenticated()
 		.and()
 		.addFilter(new JwtAuthorizationFilter(authenticationManager()));

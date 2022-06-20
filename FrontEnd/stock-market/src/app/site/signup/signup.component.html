@@ -6,15 +6,15 @@
     <div class="card">
         <div class="container-fluid">
             <h2 class="text-center mb-3">Signup</h2>
-            <div class="text-danger" *ngIf="error != ''">User Already Exists. {{error}}</div>
+            <div class="text-danger" *ngIf="error != ''">{{error}}</div>
             <form [formGroup]="signupForm">
                 <div class="form-row">
                     <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                        <label for="name">Full Name<span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="name" formControlName="name"
+                        <label for="userName">Full Name<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="userName" formControlName="userName"
                             placeholder="Enter Name">
                         <small
-                            *ngIf="(name.invalid && (name.touched || name.dirty) )&& name.errors.required"
+                            *ngIf="(userName.invalid && (userName.touched || userName.dirty) )&& userName.errors.required"
                             class="text-danger">Name is required.</small>
                     </div>
                 </div>

@@ -1,4 +1,3 @@
-import { Role } from './role';
 
 export interface User {
     id?:number;
@@ -7,5 +6,4 @@ export interface User {
     email:string;
     mobileNumber:string;
     confirmed?:boolean;
-    role?:Role;
 }
