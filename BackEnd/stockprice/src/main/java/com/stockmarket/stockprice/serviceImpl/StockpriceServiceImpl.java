@@ -1,5 +1,6 @@
 package com.stockmarket.stockprice.serviceImpl;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import com.stockmarket.stockprice.StockpriceApplication;
@@ -15,7 +17,9 @@ import com.stockmarket.stockprice.dto.StockPriceDto;
 import com.stockmarket.stockprice.entity.StockPrice;
 import com.stockmarket.stockprice.exception.ApplicationServiceException;
 import com.stockmarket.stockprice.exception.NoDataFoundException;
+import com.stockmarket.stockprice.mongo.model.CompanyDetails;
 import com.stockmarket.stockprice.mongo.model.StockExchange;
+import com.stockmarket.stockprice.mongo.model.StockPriceDetails;
 import com.stockmarket.stockprice.mongo.repository.MongoStockExchangeRepository;
 import com.stockmarket.stockprice.mongo.repository.MongoStockPriceRepository;
 import com.stockmarket.stockprice.mongo.repository.MongoTemplateRepository;
@@ -46,23 +50,44 @@ public class StockpriceServiceImpl implements StockpriceService {
 
 	@Autowired
 	DateUtil dateUtil;
+	@Autowired
+	private KafkaTemplate<String, Object> kafkaTemplate;
 
 	@Override
 	public void addStockPrice(List<StockPrice> priceList) {
 		try {
 			logger.info("Inside addStockPrice method in StockpriceServiceImpl");
+			List<StockPriceDetails> stockPriceList = new ArrayList<>();
 			priceList.stream().forEach(price -> {
 				price.getId().setPriceUpdatedDate(new Date());
 				price.setCompany(companyRepository.findById(price.getId().getCompanyCode()).get());
 				price.setStockExchange(stockExchangeRepository.findById(price.getId().getStockExchangeCode()).get());
+				StockPriceDetails stockPriceDetails = new StockPriceDetails();
+				stockPriceDetails.setCompanyCode(price.getCompany().getCode());
+				stockPriceDetails.setPriceUpdatedDate(price.getId().getPriceUpdatedDate());
+				stockPriceDetails.setStockPrice(price.getStockPrice());
+				StockExchange stockExchange = new StockExchange();
+				stockExchange.setCode(price.getStockExchange().getCode());
+				stockExchange.setName(price.getStockExchange().getName());
+				stockPriceDetails.setStockExchange(stockExchange);
+				stockPriceList.add(stockPriceDetails);
 			});
 			companyStockExchangeRepository.saveAll(priceList);
+			sendMessageToKafkaTopic(stockPriceList);
 			logger.info("End of  addStockPrice method in StockpriceServiceImpl");
 		} catch (Exception ex) {
 			logger.error("Exception in addStockPrice method" + ex.getMessage());
 			throw new ApplicationServiceException("Oops Something unexpected happened.Please try again later");
 		}
 
+	}
+
+	private void sendMessageToKafkaTopic(List<StockPriceDetails> stockPriceList) {
+		CompanyDetails companyDetails = new CompanyDetails();
+		companyDetails.setStockPrice(stockPriceList);
+		companyDetails.setRequestType("ADDSTOCKPRICE");
+		logger.info("message to topic" + companyDetails.toString());
+		kafkaTemplate.send("stockmarket", companyDetails);
 	}
 
 	@Override

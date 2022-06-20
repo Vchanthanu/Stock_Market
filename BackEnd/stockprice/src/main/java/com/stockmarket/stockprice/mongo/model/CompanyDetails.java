@@ -18,6 +18,8 @@ public class CompanyDetails {
 	public String ceo;
 	public int turnover;
 	public List<StockPriceDetails> stockPrice;
+	@JsonIgnore
+	private String requestType;
 
 	public String getCode() {
 		return code;
@@ -65,6 +67,14 @@ public class CompanyDetails {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public String getRequestType() {
+		return requestType;
+	}
+
+	public void setRequestType(String requestType) {
+		this.requestType = requestType;
 	}
 
 }

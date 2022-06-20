@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import com.stockmarket.company.CompanyApplication;
@@ -42,6 +43,9 @@ public class CompanyServiceImpl implements CompanyService {
 	@Autowired
 	MongoStockExchangeRepository mongoStockExchangeRepository;
 
+	@Autowired
+	private KafkaTemplate<String, Object> kafkaTemplate;
+
 	@Override
 	public void registerCompany(Company company) {
 		logger.info("Inside registerCompany method in CompanyServiceImpl");
@@ -56,6 +60,7 @@ public class CompanyServiceImpl implements CompanyService {
 					}
 				});
 				companyRepository.save(company);
+				sendMessageToKafkaTopic(company);
 
 			} else {
 				throw new InvalidInputDataException("Company Code already exists!!");
@@ -69,6 +74,29 @@ public class CompanyServiceImpl implements CompanyService {
 			logger.error("Exception in registerCompany method-{}", ex.getMessage());
 			throw new ApplicationServiceException("Oops Something unexpected happened.Please try again later ");
 		}
+	}
+
+	private void sendMessageToKafkaTopic(Company company) {
+		CompanyDetails companyDetails = new CompanyDetails();
+		companyDetails.setCeo(company.getCeo());
+		companyDetails.setCode(company.getCode());
+		companyDetails.setName(company.getName());
+		companyDetails.setRequestType("ADDCOMPANY");
+		companyDetails.setTurnover(company.getTurnover());
+		List<StockPriceDetails> stockPriceList = new ArrayList<>();
+		company.getStockPrice().stream().forEach(price -> {
+			StockPriceDetails stockPriceDetails = new StockPriceDetails();
+			stockPriceDetails.setCompanyCode(price.getCompany().getCode());
+			stockPriceDetails.setPriceUpdatedDate(price.getId().getPriceUpdatedDate());
+			stockPriceDetails.setStockPrice(price.getStockPrice());
+			StockExchange stockExchange = new StockExchange();
+			stockExchange.setCode(price.getStockExchange().getCode());
+			stockExchange.setName(price.getStockExchange().getName());
+			stockPriceList.add(stockPriceDetails);
+		});
+		companyDetails.setStockPrice(stockPriceList);
+		logger.info("message to topic" + companyDetails.toString());
+		kafkaTemplate.send("stockmarket", companyDetails);
 	}
 
 	@Override
@@ -121,6 +149,11 @@ public class CompanyServiceImpl implements CompanyService {
 		try {
 			logger.info("Inside deleteCompany method in CompanyServiceImpl");
 			companyRepository.deleteById(companyCode);
+			CompanyDetails companyDetails = new CompanyDetails();
+			companyDetails.setCode(companyCode);
+			companyDetails.setRequestType("DELETE");
+			logger.info("message to topic" + companyDetails.toString());
+			kafkaTemplate.send("stockmarket", companyDetails);
 			logger.info("End of deleteCompany method in CompanyServiceImpl");
 		} catch (Exception ex) {
 			logger.error("Exception in delete company method" + companyCode + ex.getMessage());

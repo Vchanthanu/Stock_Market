@@ -1,9 +1,9 @@
-package com.stockmarket.company.mongo.model;
+package com.stockmarket.kafkaconsumercomponent.model;
 
 import java.util.List;
 
-import javax.persistence.Id;
-
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -17,6 +17,7 @@ public class CompanyDetails {
 	private String name;
 	private String ceo;
 	private int turnover;
+	@Transient
 	private List<StockPriceDetails> stockPrice;
 	@JsonIgnore
 	private String requestType;
