@@ -16,7 +16,7 @@ export class SearchCompanyComponent implements OnInit {
 
   ngOnInit(): void {
     this.gridConfig();
-    this.companyService.getAllCompanies().subscribe((data: any) => {
+    this.companyService.getAllCompany().subscribe((data: any) => {
       this.rowData = data
     })
   }

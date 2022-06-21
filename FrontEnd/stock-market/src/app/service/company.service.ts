@@ -6,12 +6,17 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class CompanyService {
-  public domainUrl = environment.baseUrl+"company/";
+  public domainUrl = environment.baseUrl + "company/";
 
-  getAllCompaniesUrl = this.domainUrl+"all";
-  constructor(private http:HttpClient) { }
+  getAllCompanyUrl = this.domainUrl + "all";
+  registerCompanyUrl = this.domainUrl + "register";
+  constructor(private http: HttpClient) { }
 
-  getAllCompanies(){
-    return this.http.get(this.getAllCompaniesUrl);
+  getAllCompany() {
+    return this.http.get(this.getAllCompanyUrl);
+  }
+
+  registerCompany(req: any) {
+    return this.http.post(this.registerCompanyUrl, req);
   }
 }
