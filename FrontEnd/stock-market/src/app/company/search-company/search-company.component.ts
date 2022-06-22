@@ -37,7 +37,13 @@ export class SearchCompanyComponent implements OnInit {
   onGridReady(params: any) {
     params.api.sizeColumnsToFit();
   }
-  onMouseOver(event: any) {
+  onMouseOver(params: any) {
+    sessionStorage.setItem("companyCode",JSON.stringify(params.data.code));
+  }
 
+  onKeypressEvent(event:any){
+    this.companyService.searchByCompanyName(event.target.value).subscribe((data:any)=>{
+      this.rowData = data
+    })
   }
 }
