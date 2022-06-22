@@ -78,6 +78,7 @@ export class AddCompanyComponent implements OnInit {
       });
       req.stockPrice = reqStockPriceList;
       this.companyService.registerCompany(req).subscribe((data: any) => {
+        console.log(data);
         this.router.navigate(['company']);
       }, (error: any) => {
         this.errorMsg = error.message;
