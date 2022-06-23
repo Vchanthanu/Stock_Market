@@ -3,11 +3,15 @@ package com.stockmarket.company.serviceImpl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
@@ -16,15 +20,15 @@ import com.stockmarket.company.entity.Company;
 import com.stockmarket.company.exception.ApplicationServiceException;
 import com.stockmarket.company.exception.InvalidInputDataException;
 import com.stockmarket.company.exception.NoDataFoundException;
-import com.stockmarket.company.mongo.model.CompanyDetails;
-import com.stockmarket.company.mongo.model.StockExchange;
-import com.stockmarket.company.mongo.model.StockPriceDetails;
 import com.stockmarket.company.mongo.repository.MongoCompanyRepository;
 import com.stockmarket.company.mongo.repository.MongoStockExchangeRepository;
 import com.stockmarket.company.mongo.repository.MongoStockPriceRepository;
 import com.stockmarket.company.repository.CompanyRepository;
 import com.stockmarket.company.repository.StockExchangeRepository;
 import com.stockmarket.company.service.CompanyService;
+import com.stockmarket.mongo.model.CompanyDetails;
+import com.stockmarket.mongo.model.StockExchange;
+import com.stockmarket.mongo.model.StockPriceDetails;
 
 @Service
 public class CompanyServiceImpl implements CompanyService {
@@ -45,12 +49,14 @@ public class CompanyServiceImpl implements CompanyService {
 
 	@Autowired
 	private KafkaTemplate<String, Object> kafkaTemplate;
+	@Autowired
+	private MongoTemplate mongoTemplate;
 
 	@Override
 	public void registerCompany(Company company) {
 		logger.info("Inside registerCompany method in CompanyServiceImpl");
 		try {
-			if (mongoCompanyRepository.findByCode(company.getCode()).get() == null) {
+			if (mongoCompanyRepository.findByCode(company.getCode()) == null) {
 				company.getStockPrice().forEach(stockPrice -> {
 					if (stockPrice.getId() != null) {
 						stockPrice.getId().setPriceUpdatedDate(new Date());
@@ -72,7 +78,8 @@ public class CompanyServiceImpl implements CompanyService {
 
 		catch (Exception ex) {
 			logger.error("Exception in registerCompany method-{}", ex.getMessage());
-			throw new ApplicationServiceException("Oops Something unexpected happened.Please try again later ");
+			throw new ApplicationServiceException(
+					"Oops Something unexpected happened.Please try again later.Error: " + ex.getMessage());
 		}
 	}
 
@@ -92,6 +99,7 @@ public class CompanyServiceImpl implements CompanyService {
 			StockExchange stockExchange = new StockExchange();
 			stockExchange.setCode(price.getStockExchange().getCode());
 			stockExchange.setName(price.getStockExchange().getName());
+			stockPriceDetails.setStockExchange(stockExchange);
 			stockPriceList.add(stockPriceDetails);
 		});
 		companyDetails.setStockPrice(stockPriceList);
@@ -115,9 +123,12 @@ public class CompanyServiceImpl implements CompanyService {
 				throw new NoDataFoundException("No Companies available");
 			}
 
+		} catch (NoDataFoundException ex) {
+			throw ex;
 		} catch (Exception ex) {
 			logger.error("Exception in getAllCompanies method" + ex.getMessage());
-			throw new ApplicationServiceException("Oops Something unexpected happened.Please try again later ");
+			throw new ApplicationServiceException(
+					"Oops Something unexpected happened.Please try again later.Error: " + ex.getMessage());
 		}
 
 	}
@@ -157,7 +168,8 @@ public class CompanyServiceImpl implements CompanyService {
 			logger.info("End of deleteCompany method in CompanyServiceImpl");
 		} catch (Exception ex) {
 			logger.error("Exception in delete company method" + companyCode + ex.getMessage());
-			throw new ApplicationServiceException("Oops Something unexpected happened.Please try again later ");
+			throw new ApplicationServiceException(
+					"Oops Something unexpected happened.Please try again later. Error: " + ex.getMessage());
 		}
 	}
 
@@ -166,16 +178,21 @@ public class CompanyServiceImpl implements CompanyService {
 
 		try {
 			logger.info("Inside getCompanyByCode method in CompanyServiceImpl");
-			CompanyDetails company = mongoCompanyRepository.findByCode(companyCode).get();
+			CompanyDetails company = mongoCompanyRepository.findByCode(companyCode);
 			if (company != null) {
 				List<StockExchange> stockExchangeList = mongoStockExchangeRepository.findAll();
 				getCompanyStockPrice(stockExchangeList, company);
+			} else {
+				throw new NoDataFoundException("No data found for the company code" + companyCode);
 			}
 			logger.info("Company Details :: {}", company.toString());
 			return company;
+		} catch (NoDataFoundException ex) {
+			throw ex;
 		} catch (Exception ex) {
 			logger.error("Exception in getCompanyByCode method" + ex.getMessage());
-			throw new ApplicationServiceException("Oops Something unexpected happened.Please try again later");
+			throw new ApplicationServiceException(
+					"Oops Something unexpected happened.Please try again later.Error:" + ex.getMessage());
 		}
 	}
 
@@ -183,15 +200,23 @@ public class CompanyServiceImpl implements CompanyService {
 	public List<String> getMatchingCompanyCodes(String searchString) {
 		try {
 			logger.info("Inside getMatchingCompanyCodes method in CompanyServiceImpl");
-			List<String> searchList = mongoCompanyRepository.findByCodeLike(searchString);
-			if (!searchList.isEmpty()) {
-				return searchList;
+			Query query = new Query();
+			query.addCriteria(Criteria.where("code").regex(searchString.trim(), "i"));
+			List<String> companyCodes = mongoTemplate.findDistinct(query, "code", "Company", String.class);
+			if (companyCodes.size() > 0) {
+				return companyCodes;
+
 			} else {
 				throw new NoDataFoundException("No Data available for the corresponding search");
+
 			}
+
+		} catch (NoDataFoundException ex) {
+			throw ex;
 		} catch (Exception ex) {
-			logger.error("Exception in getMatchingCompanyCodes method" + ex.getMessage());
-			throw new ApplicationServiceException("Oops Something unexpected happened.Please try again later");
+			logger.error("Exception in getMatchingCompanyCodes method." + ex.getMessage());
+			throw new ApplicationServiceException(
+					"Oops Something unexpected happened.Please try again later. Error: " + ex.getMessage());
 		}
 	}
 

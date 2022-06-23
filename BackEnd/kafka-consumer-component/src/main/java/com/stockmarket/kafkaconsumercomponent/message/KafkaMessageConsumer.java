@@ -8,8 +8,8 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 import com.stockmarket.kafkaconsumercomponent.KafkaConsumerComponentApplication;
-import com.stockmarket.kafkaconsumercomponent.model.CompanyDetails;
 import com.stockmarket.kafkaconsumercomponent.service.KafkaConsumerService;
+import com.stockmarket.mongo.model.CompanyDetails;
 
 @Component
 public class KafkaMessageConsumer {
@@ -17,9 +17,9 @@ public class KafkaMessageConsumer {
 	@Autowired
 	KafkaConsumerService kafkaConsumerService;
 
-	@KafkaListener(topics = "stockMarket", groupId = "group_id")
+	@KafkaListener(topics = "stockmarket", groupId = "group_id")
 	public void consume(CompanyDetails companyDetails) {
-		logger.info(String.format("Comsumed message from topic -> %s", companyDetails));
+		logger.info(String.format("Consumed message from topic -> %s", companyDetails));
 		if (companyDetails != null) {
 			if (companyDetails.getRequestType().equalsIgnoreCase("ADDCOMPANY")) {
 				kafkaConsumerService.addCompany(companyDetails);

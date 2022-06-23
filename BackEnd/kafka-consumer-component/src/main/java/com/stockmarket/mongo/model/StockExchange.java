@@ -1,4 +1,4 @@
-package com.stockmarket.kafkaconsumercomponent.model;
+package com.stockmarket.mongo.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

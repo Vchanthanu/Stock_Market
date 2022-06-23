@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.stockmarket.company.CompanyApplication;
 import com.stockmarket.company.entity.Company;
-import com.stockmarket.company.mongo.model.CompanyDetails;
 import com.stockmarket.company.service.CompanyService;
+import com.stockmarket.mongo.model.CompanyDetails;
 
 @RestController
 @RequestMapping("/api/v1.0/market/company")
@@ -30,7 +30,7 @@ public class CompanyController {
 
 	@GetMapping("/all")
 	public List<CompanyDetails> getAllCompanies() {
-		logger.info("Inside registerCompany method in CompanyController");
+		logger.info("Inside getAllCompanies method in CompanyController");
 		return companyService.getAllCompanies();
 	}
 

@@ -17,7 +17,7 @@ public class StockPrice {
 
 	@EmbeddedId
 	CompanyStockExchangePk id;
-	@NotNull(message="stockPrice cannot be empty")
+	@NotNull(message = "stockPrice cannot be empty")
 	@Column(name = "cse_stock_price")
 	private float stockPrice;
 
@@ -25,7 +25,7 @@ public class StockPrice {
 	@JsonBackReference(value = "stockPriceCompany")
 	@MapsId("companyCode")
 	@JoinColumn(name = "cse_co_code")
-	public Company company;
+	private Company company;
 
 	@ManyToOne
 	@JsonBackReference(value = "stockPricestockExchange")

@@ -2,9 +2,9 @@ package com.stockmarket.stockprice.service;
 
 import java.util.List;
 
+import com.stockmarket.mongo.model.StockExchange;
 import com.stockmarket.stockprice.dto.StockPriceDto;
 import com.stockmarket.stockprice.entity.StockPrice;
-import com.stockmarket.stockprice.mongo.model.StockExchange;
 
 public interface StockpriceService {
 

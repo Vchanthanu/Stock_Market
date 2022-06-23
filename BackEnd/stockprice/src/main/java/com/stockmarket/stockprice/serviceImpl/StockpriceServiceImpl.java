@@ -12,14 +12,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import com.stockmarket.mongo.model.CompanyDetails;
+import com.stockmarket.mongo.model.StockExchange;
+import com.stockmarket.mongo.model.StockPriceDetails;
 import com.stockmarket.stockprice.StockpriceApplication;
 import com.stockmarket.stockprice.dto.StockPriceDto;
+import com.stockmarket.stockprice.entity.Company;
 import com.stockmarket.stockprice.entity.StockPrice;
 import com.stockmarket.stockprice.exception.ApplicationServiceException;
+import com.stockmarket.stockprice.exception.InvalidInputDataException;
 import com.stockmarket.stockprice.exception.NoDataFoundException;
-import com.stockmarket.stockprice.mongo.model.CompanyDetails;
-import com.stockmarket.stockprice.mongo.model.StockExchange;
-import com.stockmarket.stockprice.mongo.model.StockPriceDetails;
 import com.stockmarket.stockprice.mongo.repository.MongoStockExchangeRepository;
 import com.stockmarket.stockprice.mongo.repository.MongoStockPriceRepository;
 import com.stockmarket.stockprice.mongo.repository.MongoTemplateRepository;
@@ -60,24 +62,35 @@ public class StockpriceServiceImpl implements StockpriceService {
 			List<StockPriceDetails> stockPriceList = new ArrayList<>();
 			priceList.stream().forEach(price -> {
 				price.getId().setPriceUpdatedDate(new Date());
-				price.setCompany(companyRepository.findById(price.getId().getCompanyCode()).get());
-				price.setStockExchange(stockExchangeRepository.findById(price.getId().getStockExchangeCode()).get());
-				StockPriceDetails stockPriceDetails = new StockPriceDetails();
-				stockPriceDetails.setCompanyCode(price.getCompany().getCode());
-				stockPriceDetails.setPriceUpdatedDate(price.getId().getPriceUpdatedDate());
-				stockPriceDetails.setStockPrice(price.getStockPrice());
-				StockExchange stockExchange = new StockExchange();
-				stockExchange.setCode(price.getStockExchange().getCode());
-				stockExchange.setName(price.getStockExchange().getName());
-				stockPriceDetails.setStockExchange(stockExchange);
-				stockPriceList.add(stockPriceDetails);
+				Company company = companyRepository.findByCode(price.getId().getCompanyCode());
+				if (company != null) {
+					price.setCompany(company);
+					price.setStockExchange(
+							stockExchangeRepository.findById(price.getId().getStockExchangeCode()).get());
+					StockPriceDetails stockPriceDetails = new StockPriceDetails();
+					stockPriceDetails.setCompanyCode(price.getCompany().getCode());
+					stockPriceDetails.setPriceUpdatedDate(price.getId().getPriceUpdatedDate());
+					stockPriceDetails.setStockPrice(price.getStockPrice());
+					StockExchange stockExchange = new StockExchange();
+					stockExchange.setCode(price.getStockExchange().getCode());
+					stockExchange.setName(price.getStockExchange().getName());
+					stockPriceDetails.setStockExchange(stockExchange);
+					stockPriceList.add(stockPriceDetails);
+
+				} else {
+					throw new InvalidInputDataException(
+							"Company is not registered.Please provide a valid company code");
+				}
 			});
 			companyStockExchangeRepository.saveAll(priceList);
 			sendMessageToKafkaTopic(stockPriceList);
 			logger.info("End of  addStockPrice method in StockpriceServiceImpl");
+		} catch (InvalidInputDataException ex) {
+			throw ex;
 		} catch (Exception ex) {
 			logger.error("Exception in addStockPrice method" + ex.getMessage());
-			throw new ApplicationServiceException("Oops Something unexpected happened.Please try again later");
+			throw new ApplicationServiceException(
+					"Oops Something unexpected happened.Please try again later. Error: " + ex.getMessage());
 		}
 
 	}
@@ -99,7 +112,8 @@ public class StockpriceServiceImpl implements StockpriceService {
 			return stockExchangeList;
 		} catch (Exception ex) {
 			logger.error("Exception in getStockExchangeDetails method" + ex.getMessage());
-			throw new ApplicationServiceException("Oops Something unexpected happened.Please try again later");
+			throw new ApplicationServiceException(
+					"Oops Something unexpected happened.Please try again later. Error: " + ex.getMessage());
 		}
 
 	}
@@ -109,9 +123,9 @@ public class StockpriceServiceImpl implements StockpriceService {
 			String toDate) {
 		try {
 			logger.info("Inside getStockPriceBasedOnDateRange method in StockpriceServiceImpl");
-			List<com.stockmarket.stockprice.mongo.model.StockPriceDetails> stockPriceList = mongoTemplateRepository
-					.getStockPriceBasedOnDateRange(companyCode, stockExchangeCode, dateUtil.getDate(fromDate),
-							dateUtil.getDate(toDate));
+			List<com.stockmarket.mongo.model.StockPriceDetails> stockPriceList = mongoTemplateRepository
+					.getStockPriceBasedOnDateRange(companyCode, stockExchangeCode, dateUtil.getDate(fromDate, 0),
+							dateUtil.getDate(toDate, 1));
 			if (!stockPriceList.isEmpty()) {
 				List<Float> priceList = stockPriceList.stream().map(price -> price.getStockPrice())
 						.collect(Collectors.toList());
@@ -130,9 +144,12 @@ public class StockpriceServiceImpl implements StockpriceService {
 				throw new NoDataFoundException(
 						"No Data available for the selected company for the selected date range");
 			}
+		} catch (NoDataFoundException ex) {
+			throw ex;
 		} catch (Exception ex) {
 			logger.error("Exception in getStockExchangeDetails method" + ex.getMessage());
-			throw new ApplicationServiceException("Oops Something unexpected happened.Please try again later");
+			throw new ApplicationServiceException(
+					"Oops Something unexpected happened.Please try again later. Error: " + ex.getMessage());
 		}
 		return null;
 	}

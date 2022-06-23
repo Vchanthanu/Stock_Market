@@ -18,21 +18,21 @@ public class Company {
 	@Id
 	@NotBlank(message = "code cannot be blank")
 	@Column(name = "co_code")
-	public String code;
+	private String code;
 	@NotBlank(message = "name cannot be blank")
 	@Column(name = "co_name")
-	public String name;
+	private String name;
 	@NotBlank(message = "ceo cannot be blank")
 	@Column(name = "co_ceo")
-	public String ceo;
+	private String ceo;
 	@NotNull(message = "turnover cannot be empty")
 	@Column(name = "co_turnover")
-	public int turnover;
+	private int turnover;
 	@NotBlank(message = "website cannot be blank")
 	@Column(name = "co_website")
-	public String website;
+	private String website;
 	@OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
-	public List<StockPrice> stockPrice;
+	private List<StockPrice> stockPrice;
 
 	public String getCode() {
 		return code;

@@ -3,7 +3,7 @@ package com.stockmarket.company.service;
 import java.util.List;
 
 import com.stockmarket.company.entity.Company;
-import com.stockmarket.company.mongo.model.CompanyDetails;
+import com.stockmarket.mongo.model.CompanyDetails;
 
 public interface CompanyService {
 

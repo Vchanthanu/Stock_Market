@@ -1,4 +1,4 @@
-package com.stockmarket.company.mongo.model;
+package com.stockmarket.mongo.model;
 
 import java.util.Date;
 

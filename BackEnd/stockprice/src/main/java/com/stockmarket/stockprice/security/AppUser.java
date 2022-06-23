@@ -1,11 +1,11 @@
-package com.stockmarket.authentication.security;
+package com.stockmarket.stockprice.security;
 
 import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.stockmarket.authentication.model.User;
+import com.stockmarket.stockprice.entity.User;
 
 public class AppUser implements UserDetails {
 

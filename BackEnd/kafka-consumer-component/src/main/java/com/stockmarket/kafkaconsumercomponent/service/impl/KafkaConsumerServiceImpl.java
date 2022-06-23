@@ -8,11 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.stockmarket.kafkaconsumercomponent.KafkaConsumerComponentApplication;
-import com.stockmarket.kafkaconsumercomponent.model.CompanyDetails;
-import com.stockmarket.kafkaconsumercomponent.model.StockPriceDetails;
 import com.stockmarket.kafkaconsumercomponent.repository.MongoCompanyRepository;
 import com.stockmarket.kafkaconsumercomponent.repository.MongoStockPriceRepository;
 import com.stockmarket.kafkaconsumercomponent.service.KafkaConsumerService;
+import com.stockmarket.mongo.model.CompanyDetails;
+import com.stockmarket.mongo.model.StockPriceDetails;
 
 @Service
 public class KafkaConsumerServiceImpl implements KafkaConsumerService {
@@ -49,7 +49,7 @@ public class KafkaConsumerServiceImpl implements KafkaConsumerService {
 		try {
 			logger.info("Inside deleteCompany method in KafkaConsumerServiceImpl:{}" + code);
 			mongoCompanyRepository.deleteByCode(code);
-			mongoStockPriceRepository.deleteByCode(code);
+			mongoStockPriceRepository.deleteByCompanyCode(code);
 		} catch (Exception ex) {
 			logger.info("Exception occured while deleting company to mongo db:{}" + code);
 		}
