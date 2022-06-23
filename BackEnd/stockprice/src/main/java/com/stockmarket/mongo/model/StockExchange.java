@@ -1,4 +1,4 @@
-package com.stockmarket.stockprice.mongo.model;
+package com.stockmarket.mongo.model;
 
 import javax.persistence.Id;
 

@@ -11,9 +11,9 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
+import com.stockmarket.mongo.model.StockPriceDetails;
 import com.stockmarket.stockprice.StockpriceApplication;
 import com.stockmarket.stockprice.exception.ApplicationServiceException;
-import com.stockmarket.stockprice.mongo.model.StockPriceDetails;
 
 @Repository
 public class MongoTemplateRepository {
@@ -28,7 +28,7 @@ public class MongoTemplateRepository {
 			Query query = new Query();
 			query.addCriteria(new Criteria().andOperator(Criteria.where("companyCode").is(companyCode),
 					Criteria.where("stockExchange.code").is(stockExchangeCode),
-					Criteria.where("priceUpdatedDate").gte(fromDate), Criteria.where("priceUpdatedDate").lte(toDate)));
+					Criteria.where("priceUpdatedDate").gte(fromDate), Criteria.where("priceUpdatedDate").lt(toDate)));
 			return mongoTemplate.find(query, StockPriceDetails.class, "StockPrice");
 		} catch (Exception ex) {
 			logger.error("Exception in getStockPriceBasedOnDateRange method" + ex.getMessage());

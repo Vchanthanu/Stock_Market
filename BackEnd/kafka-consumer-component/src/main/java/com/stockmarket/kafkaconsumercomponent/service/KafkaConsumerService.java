@@ -2,8 +2,8 @@ package com.stockmarket.kafkaconsumercomponent.service;
 
 import java.util.List;
 
-import com.stockmarket.kafkaconsumercomponent.model.CompanyDetails;
-import com.stockmarket.kafkaconsumercomponent.model.StockPriceDetails;
+import com.stockmarket.mongo.model.CompanyDetails;
+import com.stockmarket.mongo.model.StockPriceDetails;
 
 public interface KafkaConsumerService {
 

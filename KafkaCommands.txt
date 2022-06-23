@@ -1,4 +1,18 @@
 1.Start zookeeper:
-zookeeper-server-start.bat D:\sw\kafka_2.13-3.0.0\kafka_2.13-3.0.0\config\zookeeper.properties
+zookeeper-server-start.bat D:\sw\kafka_2.12-2.4.1\config\zookeeper.properties
+
 2.Start kafka server:
-kafka-server-start.bat D:\sw\kafka_2.13-3.0.0\kafka_2.13-3.0.0\config\server.properties
+kafka-server-start.bat D:\sw\kafka_2.12-2.4.1\config\server.properties
+
+3. create topic stockmarket:
+kafka-topics.bat --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic stockmarket
+ 
+4. list the topics created:
+kafka-topics.bat --list --bootstrap-server localhost:9092
+
+5.start producer:
+kafka-console-producer.bat --broker-list localhost:9092 --topic stockmarket
+
+6.start consumer:
+kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic stockmarket
+

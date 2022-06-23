@@ -1,24 +1,29 @@
-package com.stockmarket.stockprice.mongo.model;
+package com.stockmarket.mongo.model;
 
 import java.util.List;
 
-import javax.persistence.Id;
-
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+@JsonInclude(Include.NON_NULL)
 @Document(collection = "Company")
 public class CompanyDetails {
 	@JsonIgnore
 	@Id
 	private String id;
-	public String code;
-	public String name;
-	public String ceo;
-	public int turnover;
-	public List<StockPriceDetails> stockPrice;
-	@JsonIgnore
+	private String code;
+	private String name;
+	private String ceo;
+	private int turnover;
+	private String website;
+	@Transient
+	private List<StockPriceDetails> stockPrice;
+	@Transient
 	private String requestType;
 
 	public String getCode() {
@@ -75,6 +80,14 @@ public class CompanyDetails {
 
 	public void setRequestType(String requestType) {
 		this.requestType = requestType;
+	}
+
+	public String getWebsite() {
+		return website;
+	}
+
+	public void setWebsite(String website) {
+		this.website = website;
 	}
 
 }

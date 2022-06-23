@@ -1,13 +1,16 @@
-package com.stockmarket.kafkaconsumercomponent.model;
+package com.stockmarket.mongo.model;
 
 import java.util.List;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
+import javax.persistence.Id;
+
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+@JsonInclude(Include.NON_NULL)
 @Document(collection = "Company")
 public class CompanyDetails {
 	@JsonIgnore
@@ -17,9 +20,8 @@ public class CompanyDetails {
 	private String name;
 	private String ceo;
 	private int turnover;
-	@Transient
+	private String website;
 	private List<StockPriceDetails> stockPrice;
-	@JsonIgnore
 	private String requestType;
 
 	public String getCode() {
@@ -76,6 +78,14 @@ public class CompanyDetails {
 
 	public void setRequestType(String requestType) {
 		this.requestType = requestType;
+	}
+
+	public String getWebsite() {
+		return website;
+	}
+
+	public void setWebsite(String website) {
+		this.website = website;
 	}
 
 }

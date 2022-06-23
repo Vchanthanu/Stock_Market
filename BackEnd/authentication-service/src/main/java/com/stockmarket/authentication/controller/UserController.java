@@ -10,7 +10,7 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,21 +27,22 @@ import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
-
 @RestController
 @RequestMapping("/api/v1.0/market/authentication/user")
 public class UserController {
-	
+
 	public static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
-	
+
 	@Autowired
 	private AppUserDetailsService appUserDetailsService;
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
 
 	@PostMapping("/signup")
-	private CommonResponse addUser(@RequestBody @Valid User user)  {
+	public CommonResponse addUser(@RequestBody @Valid User user) {
 		CommonResponse res = new CommonResponse();
 		try {
-			LOGGER.info("User creation request received :: {}",user.toString());
+			LOGGER.info("User creation request received :: {}", user.toString());
 			appUserDetailsService.addUser(user);
 			res.setStatus(true);
 			res.setMessage("User Added successfully");
@@ -51,36 +52,33 @@ public class UserController {
 		return res;
 	}
 
-//	public PasswordEncoder passwordEncoder() {
-//		return new BCryptPasswordEncoder();
-//	}
-	
-	
 	@GetMapping("/login")
 	public Map<String, String> authenticate(@RequestHeader("Authorization") String authHeader) {
 		LOGGER.info("START Authenticate ");
 		Map<String, String> jwt = new HashMap<String, String>();
 		String email = getEmail(authHeader);
-		User appUser = (User) appUserDetailsService.findByEmail(email);
-		if(null != appUser && appUser.getPassword().contentEquals(getPassword(authHeader))) {
-			String token = generateJwt(appUser.getUserName());
-			jwt.put("token", token);
-			jwt.put("user", appUser.getUserName());
-			jwt.put("id", String.valueOf(appUser.getId()));
-			jwt.put("status","true");
-			jwt.put("message","Logged in successfully");
-		}else{
-			if(null == appUser) {
-				jwt.put("status","false");
-				jwt.put("message","Invalid emailId.");
-			}else {
-				jwt.put("status","false");
-				jwt.put("message","Invalid password.");
-			}
-		}
+//		User appUser = appUserDetailsService.findByEmail(email);
+//		if (null != appUser && passwordEncoder.matches(getPassword(authHeader), appUser.getPassword())) {
+		String token = generateJwt(email);
+		jwt.put("token", token);
+//			jwt.put("user", appUser.getUserName());
+//			jwt.put("email", appUser.getEmail());
+//			jwt.put("id", String.valueOf(appUser.getId()));
+		jwt.put("status", "true");
+		jwt.put("message", "Logged in successfully");
+//		} else {
+//			if (null == appUser) {
+//				jwt.put("status", "false");
+//				jwt.put("message", "Invalid email.");
+//			} else {
+//				jwt.put("status", "false");
+//				jwt.put("message", "Invalid password.");
+//			}
+//		}
 		LOGGER.info("END Authenticate ");
 		return jwt;
 	}
+
 	private String generateJwt(String user) {
 		JwtBuilder builder = Jwts.builder();
 		builder.setSubject(user);
@@ -95,11 +93,11 @@ public class UserController {
 		LOGGER.info("Start get user method");
 		String encodedCredentials = authHeader.split(" ")[1];
 		byte[] credentials = Base64.getDecoder().decode(encodedCredentials);
-		String user = new String(credentials).split(":")[0];
+		String email = new String(credentials).split(":")[0];
 		LOGGER.info("End get user method");
-		return user;
+		return email;
 	}
-	
+
 	private String getPassword(String authHeader) {
 		LOGGER.info("Start get user method");
 		String encodedCredentials = authHeader.split(" ")[1];
@@ -109,5 +107,3 @@ public class UserController {
 		return password;
 	}
 }
-
-

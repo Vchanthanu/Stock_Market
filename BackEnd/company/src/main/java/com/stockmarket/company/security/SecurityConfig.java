@@ -1,4 +1,4 @@
-package com.stockmarket.authentication.security;
+package com.stockmarket.company.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -9,8 +9,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import com.stockmarket.authentication.service.AppUserDetailsService;
 
 @Configuration
 @EnableWebSecurity
@@ -32,8 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity.cors();
 		httpSecurity.csrf().disable().httpBasic().and().authorizeRequests()
-				.antMatchers("/api/v1.0/market/authentication/user/**", "/authentication-service/**", "/v3/api-docs/**")
-				.anonymous().anyRequest().authenticated().and()
+				.antMatchers("/company/**", "/v3/api-docs/**").anonymous().anyRequest().authenticated().and()
 				.addFilter(new JwtAuthorizationFilter(authenticationManager()));
 	}
 }

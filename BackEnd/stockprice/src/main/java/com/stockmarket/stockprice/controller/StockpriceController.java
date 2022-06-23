@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.stockmarket.mongo.model.StockExchange;
 import com.stockmarket.stockprice.StockpriceApplication;
 import com.stockmarket.stockprice.dto.StockPriceDto;
 import com.stockmarket.stockprice.entity.StockPrice;
 import com.stockmarket.stockprice.exception.InvalidInputDataException;
-import com.stockmarket.stockprice.mongo.model.StockExchange;
 import com.stockmarket.stockprice.service.StockpriceService;
 import com.stockmarket.stockprice.util.ValidationUtil;
 

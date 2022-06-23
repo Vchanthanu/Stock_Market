@@ -11,31 +11,32 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsWebFilter;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 
-
 @Configuration
 public class StockMarketApiGateway {
 
 	@Bean
 	public RouteLocator gatewayRoutes(RouteLocatorBuilder builder) {
-		
+
 		return builder.routes()
-				.route(r -> r.path("/api/v1.0/market/company/**").uri("http://localhost:8090/"))
-				.route(r -> r.path("/api/v1.0/market/authentication/**").uri("http://localhost:8092/"))
-				.route(r -> r.path("/api/v1.0/market/stock/**").uri("http://localhost:8091/"))
+				.route(r -> r.path("/api/v1.0/market/company/**", "/company/**").uri("http://localhost:8090/"))
+				.route(r -> r.path("/api/v1.0/market/authentication/**", "/authentication-service/**")
+						.uri("http://localhost:8092/"))
+				.route(r -> r.path("/api/v1.0/market/stock/**", "/stockprice/**").uri("http://localhost:8091/"))
 				.build();
-	} 
-	  @Bean
-	    public CorsWebFilter corsWebFilter() {
+	}
 
-	        final CorsConfiguration corsConfig = new CorsConfiguration();
-	        corsConfig.setAllowedOrigins(Collections.singletonList("*"));
-	        corsConfig.setMaxAge(3600L);
-	        corsConfig.setAllowedMethods(Arrays.asList("GET", "POST","PUT","DELETE"));
-	        corsConfig.addAllowedHeader("*");
+	@Bean
+	public CorsWebFilter corsWebFilter() {
 
-	        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-	        source.registerCorsConfiguration("/**", corsConfig);
+		final CorsConfiguration corsConfig = new CorsConfiguration();
+		corsConfig.setAllowedOrigins(Collections.singletonList("*"));
+		corsConfig.setMaxAge(3600L);
+		corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
+		corsConfig.addAllowedHeader("*");
 
-	        return new CorsWebFilter(source);
-	    }  
+		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", corsConfig);
+
+		return new CorsWebFilter(source);
+	}
 }

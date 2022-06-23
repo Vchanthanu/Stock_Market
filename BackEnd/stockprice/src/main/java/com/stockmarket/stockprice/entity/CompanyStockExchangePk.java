@@ -16,7 +16,7 @@ public class CompanyStockExchangePk implements Serializable {
 	private static final long serialVersionUID = 2615503081236176477L;
 	@NotBlank(message="companyCode cannot be blank")
 	@Column(name = "cse_co_code")
-	public String companyCode;
+	private String companyCode;
 	@NotBlank(message="stockExchangeCode cannot be blank")
 	@Column(name = "cse_se_code")
 	private String stockExchangeCode;
