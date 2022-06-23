@@ -16,26 +16,34 @@ export class SearchCompanyComponent implements OnInit {
 
   ngOnInit(): void {
     this.gridConfig();
-    this.companyService.getAllCompanies().subscribe((data: any) => {
+    this.companyService.getAllCompany().subscribe((data: any) => {
       this.rowData = data
     })
   }
 
   gridConfig() {
     this.columnDefs = [
-      { headerName: 'Company Code', field: 'companyCode' },
-      { headerName: 'Company Name', field: 'companyName' },
-      { headerName: 'Stock Exchange', field: 'stockExchange' },
-      { headerName: "Last Trade Price", field: 'lastTradePrice' },
+      { headerName: 'Company Code', field: 'code' },
+      { headerName: 'Company Name', field: 'name' },
+      { headerName: 'CEO', field: 'ceo' },
+      { headerName: 'Stock Exchange', valueGetter: (params: any) => { return params.data.stockPrice[0].stockExchange.name } },
+      { headerName: "Last Trade Price", valueGetter: (params: any) => { return params.data.stockPrice[0].stockPrice } },
       { headerName: "Action", cellRenderer: CellLinkComponent }
     ];
     this.defaultColDef = {
       sortable: true
     };
   }
-  onGridReady(event: any) {
+  onGridReady(params: any) {
+    params.api.sizeColumnsToFit();
   }
-  onMouseOver(event: any) {
+  onMouseOver(params: any) {
+    sessionStorage.setItem("companyCode",JSON.stringify(params.data.code));
+  }
 
+  onKeypressEvent(event:any){
+    this.companyService.searchByCompanyName(event.target.value).subscribe((data:any)=>{
+      this.rowData = data
+    })
   }
 }
