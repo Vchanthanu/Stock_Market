@@ -1,4 +1,4 @@
-INSERT INTO `stockmarket`.`company` (`co_code`, `co_name`, `co_ceo`, `co_turnover`, `co_website`) VALUES ('SAIL', 'Steel Authority of India Ltm', 'Deepak SS', '120000', 'www.sail.com');
+INSERT INTO `stockmarket`.`company` (`co_code`, `co_name`, `co_ceo`, `co_turnover`, `co_website`) VALUES ('SAIL', 'Steel Authority of India Ltd', 'Deepak SS', '120000', 'www.sail.com');
 INSERT INTO `stockmarket`.`company` (`co_code`, `co_name`, `co_ceo`, `co_turnover`, `co_website`) VALUES ('TAMO', 'Tata Motor', 'Deepak', '12345', 'www.tatamotor.com');
 
 INSERT INTO `stockmarket`.`stock_exchange` (`se_name`, `se_code`) VALUES ('Bombay Stock Exchange', 'BSE');

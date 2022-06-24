@@ -59,13 +59,13 @@ public class UserController {
 		String email = getEmail(authHeader);
 		User appUser = appUserDetailsService.findByEmail(email);
 		if (null != appUser && passwordEncoder.matches(getPassword(authHeader), appUser.getPassword())) {
-		String token = generateJwt(email);
-		jwt.put("token", token);
+			String token = generateJwt(email);
+			jwt.put("token", token);
 			jwt.put("user", appUser.getUserName());
 			jwt.put("email", appUser.getEmail());
 			jwt.put("id", String.valueOf(appUser.getId()));
-		jwt.put("status", "true");
-		jwt.put("message", "Logged in successfully");
+			jwt.put("status", "true");
+			jwt.put("message", "Logged in successfully");
 		} else {
 			if (null == appUser) {
 				jwt.put("status", "false");
