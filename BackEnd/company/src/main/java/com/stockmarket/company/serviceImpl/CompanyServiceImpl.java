@@ -88,6 +88,7 @@ public class CompanyServiceImpl implements CompanyService {
 		companyDetails.setCeo(company.getCeo());
 		companyDetails.setCode(company.getCode());
 		companyDetails.setName(company.getName());
+		companyDetails.setWebsite(company.getWebsite());
 		companyDetails.setRequestType("ADDCOMPANY");
 		companyDetails.setTurnover(company.getTurnover());
 		List<StockPriceDetails> stockPriceList = new ArrayList<>();
