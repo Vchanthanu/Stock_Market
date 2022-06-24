@@ -57,24 +57,24 @@ public class UserController {
 		LOGGER.info("START Authenticate ");
 		Map<String, String> jwt = new HashMap<String, String>();
 		String email = getEmail(authHeader);
-//		User appUser = appUserDetailsService.findByEmail(email);
-//		if (null != appUser && passwordEncoder.matches(getPassword(authHeader), appUser.getPassword())) {
+		User appUser = appUserDetailsService.findByEmail(email);
+		if (null != appUser && passwordEncoder.matches(getPassword(authHeader), appUser.getPassword())) {
 		String token = generateJwt(email);
 		jwt.put("token", token);
-//			jwt.put("user", appUser.getUserName());
-//			jwt.put("email", appUser.getEmail());
-//			jwt.put("id", String.valueOf(appUser.getId()));
+			jwt.put("user", appUser.getUserName());
+			jwt.put("email", appUser.getEmail());
+			jwt.put("id", String.valueOf(appUser.getId()));
 		jwt.put("status", "true");
 		jwt.put("message", "Logged in successfully");
-//		} else {
-//			if (null == appUser) {
-//				jwt.put("status", "false");
-//				jwt.put("message", "Invalid email.");
-//			} else {
-//				jwt.put("status", "false");
-//				jwt.put("message", "Invalid password.");
-//			}
-//		}
+		} else {
+			if (null == appUser) {
+				jwt.put("status", "false");
+				jwt.put("message", "Invalid email.");
+			} else {
+				jwt.put("status", "false");
+				jwt.put("message", "Invalid password.");
+			}
+		}
 		LOGGER.info("END Authenticate ");
 		return jwt;
 	}

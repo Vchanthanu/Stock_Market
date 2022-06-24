@@ -18,7 +18,7 @@ export class AuthenticationService {
   authenticate(user: string, password: string): Observable<any> {
     let credentials = btoa(user + ':' + password);
     let headers = new HttpHeaders();
-    headers = headers.set('Authorization', 'Basic ' + credentials);
+    headers = headers.set('Authorization', 'authHeader ' + credentials);
     return this.httpClient.get(this.authenticationApiUrl + '/login', { headers });
   }
 
@@ -26,25 +26,7 @@ export class AuthenticationService {
     return this.httpClient.post<void>(this.authenticationApiUrl + '/signup', user);
   }
 
-  modifyUser(user: User) {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + this.getToken()
-      })
-    };
-    return this.httpClient.put<void>(this.authenticationApiUrl + "/users/" + this.userAuthService.getUser(), user, httpOptions);
-  }
-  public getUsername(username: string): Observable<User> {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + this.getToken()
-      })
-    };
-    return this.httpClient.get<User>(this.authenticationApiUrl + '/users/' + username, httpOptions);
-  }
-
+ 
   public setToken(token: string|undefined) {
     this.token = token;
   }

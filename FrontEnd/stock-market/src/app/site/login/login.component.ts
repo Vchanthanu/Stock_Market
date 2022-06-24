@@ -37,7 +37,7 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
       this.authenticationService.authenticate(this.emailId.value, this.password.value).subscribe((data: any) => {
         this.formValidation = true;
-        this.userAuthService.setUser(this.emailId.value);
+        this.userAuthService.setUser(data.user);
         this.authenticationService.setToken(data.token);
         this.userAuthService.setLog(true);
           this.router.navigate(["company"]);

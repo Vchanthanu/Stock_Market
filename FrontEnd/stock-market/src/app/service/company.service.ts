@@ -1,6 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
+import { AuthenticationService } from './authentication.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,25 +14,55 @@ export class CompanyService {
   private deleteCompanyUrl = this.domainUrl + "delete/";
   private getCompanyByCodeUrl = this.domainUrl + "get/";
   private searchByCompanyNameUrl = this.domainUrl + "search/"
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,private auth : AuthenticationService) { }
 
   getAllCompany() {
-    return this.http.get(this.getAllCompanyUrl);
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + this.auth.getToken()
+      })
+    };
+    return this.http.get(this.getAllCompanyUrl,httpOptions);
   }
 
   searchByCompanyName(key: string) {
-    return this.http.get(this.searchByCompanyNameUrl + key)
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + this.auth.getToken()
+      })
+    };
+    return this.http.get(this.searchByCompanyNameUrl + key,httpOptions)
   }
 
   deleteCompany(companyCode: String) {
-    return this.http.delete(this.deleteCompanyUrl + companyCode);
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + this.auth.getToken()
+      })
+    };
+    return this.http.delete(this.deleteCompanyUrl + companyCode,httpOptions);
   }
 
   getCompanyByCode(companyCode: String) {
-    return this.http.get(this.getCompanyByCodeUrl + companyCode);
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + this.auth.getToken()
+      })
+    };
+    return this.http.get(this.getCompanyByCodeUrl + companyCode,httpOptions);
   }
 
   registerCompany(req: any) {
-    return this.http.post(this.registerCompanyUrl, req);
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + this.auth.getToken()
+      })
+    };
+    return this.http.post(this.registerCompanyUrl, req,httpOptions);
   }
 }

@@ -1,3 +1,5 @@
+//Need to edit configfile of kafka -> zookeeper.properties (dataDir= "give kafka home dir path/zookeeper")
+//Need to edit configfile of kafka -> server.properties (log.Dir= "give kafka home dir path/kafka-logs")
 1.Start zookeeper:
 zookeeper-server-start.bat D:\sw\kafka_2.12-2.4.1\config\zookeeper.properties
 
