@@ -1,6 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { CompanyService } from 'src/app/service/company.service';
 import { StockPriceService } from 'src/app/service/stock-price.service';
 
@@ -17,8 +18,8 @@ export class DetailCompanyComponent implements OnInit {
   stockPriceForm: any;
   stockExchangeList: any;
   errorMsg = '';
-  stockPriceList: any;
-  constructor(private companyService: CompanyService, private stockService: StockPriceService, private pipe: DatePipe) { }
+  stockPriceList: any=[];
+  constructor(private router: Router, private companyService: CompanyService, private stockService: StockPriceService, private pipe: DatePipe) { }
 
   ngOnInit(): void {
     this.declareForm();
@@ -31,6 +32,8 @@ export class DetailCompanyComponent implements OnInit {
     let sessionCod: any = sessionStorage.getItem("companyCode");
     this.companyService.getCompanyByCode(JSON.parse(sessionCod)).subscribe((data: any) => {
       this.company = data;
+      let companyExchangeList = data.stockPrice.map((sp:any)=> sp.stockExchange.code);
+      this.stockExchangeList.filter((ex:any)=>companyExchangeList.includes(ex.code));
       this.rowData = data.stockPrice;
     });
   }
@@ -91,5 +94,17 @@ export class DetailCompanyComponent implements OnInit {
   }
   onGridReady(params: any) {
     params.api.sizeColumnsToFit();
+  }
+
+  deleteCompany(){
+    this.companyService.deleteCompany(this.company.code).subscribe((data:any)=>{
+      this.router.navigate(['company']);
+    },(error:any)=>{
+      this.errorMsg = error.message;
+    })
+  }
+
+  previous(){
+    this.router.navigate(['company']);
   }
 }
