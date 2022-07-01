@@ -12,13 +12,26 @@ export class SearchCompanyComponent implements OnInit {
   public columnDefs: any;
   public defaultColDef: any;
   public rowData: any = [];
+  public error: string = '';
   constructor(private companyService: CompanyService) { }
 
   ngOnInit(): void {
     this.gridConfig();
+    this.getAllCompanies();
+  }
+
+  private getAllCompanies() {
     this.companyService.getAllCompany().subscribe((data: any) => {
-      this.rowData = data
-    })
+      this.rowData = data;
+    },
+      (responseError) => {
+        if (responseError.status == 204) {
+          this.error = responseError.error.message;
+        }
+        else {
+          this.error = "System is currently unavailable Please try again later";
+        }
+      });
   }
 
   gridConfig() {
@@ -38,12 +51,28 @@ export class SearchCompanyComponent implements OnInit {
     params.api.sizeColumnsToFit();
   }
   onMouseOver(params: any) {
-    sessionStorage.setItem("companyCode",JSON.stringify(params.data.code));
+    sessionStorage.setItem("companyCode", JSON.stringify(params.data.code));
   }
 
-  onKeypressEvent(event:any){
-    this.companyService.searchByCompanyName(event.target.value).subscribe((data:any)=>{
-      this.rowData = data
-    })
+  onKeypressEvent(event: any) {
+    if (event.target.value == null || event.target.value == "") {
+      this.getAllCompanies();
+    }
+    else {
+      this.companyService.searchByCompanyName(event.target.value).subscribe((data: any) => {
+        this.rowData = data;
+      },
+        (responseError) => {
+
+          if (responseError.status == 204) {
+            this.error = responseError.error.message;
+            this.rowData = [];
+          }
+          else {
+            this.rowData = [];
+            this.error = "System is currently unavailable Please try again later";
+          }
+        });
+    }
   }
 }

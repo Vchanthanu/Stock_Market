@@ -33,7 +33,7 @@ export class CompanyService {
         'Authorization': 'Bearer ' + this.auth.getToken()
       })
     };
-    return this.http.get(this.searchByCompanyNameUrl + key,httpOptions)
+    return this.http.get(this.searchByCompanyNameUrl + key, httpOptions)
   }
 
   deleteCompany(companyCode: String) {

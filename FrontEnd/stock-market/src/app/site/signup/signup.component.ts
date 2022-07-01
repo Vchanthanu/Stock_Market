@@ -10,19 +10,21 @@ import { AuthenticationService } from 'src/app/service/authentication.service';
   styleUrls: ['./signup.component.css']
 })
 export class SignupComponent implements OnInit {
-  signupForm :any  ;
+  signupForm: any;
   user!: User;
-  error:string='';
-  loader: boolean= false;
-  constructor(private authenticationService: AuthenticationService,private router:Router) {
-   }
+  error: string = '';
+  loader: boolean = false;
+  constructor(private authenticationService: AuthenticationService, private router: Router) {
+  }
 
   ngOnInit() {
     this.signupForm = new FormGroup({
-      userName: new FormControl(null, [Validators.required]),
-      email: new FormControl(null, [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$')]),
-      mobileNumber: new FormControl(null, [Validators.required, Validators.pattern('^[0-9+]*'), Validators.maxLength(13)]),
-      password: new FormControl(null, [Validators.required]),
+      userName: new FormControl(null, [Validators.required, Validators.minLength(3)]),
+      email: new FormControl(null, [Validators.required, Validators.email
+        // ,Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$')
+      ]),
+      mobileNumber: new FormControl(null, [Validators.required, Validators.pattern('^[0-9+]*')]),
+      password: new FormControl(null, [Validators.required, Validators.minLength(6)]),
     });
   }
 
@@ -36,18 +38,18 @@ export class SignupComponent implements OnInit {
   onSubmit() {
     this.user = this.signupForm.value;
     console.log(this.user)
-    this.loader=true;
-    this.authenticationService.addUser(this.user).subscribe((data:any) => {
-      this.loader=false;
-      if(data.status){
-      this.router.navigate(['login']);
-      }else{
+    this.loader = true;
+    this.authenticationService.addUser(this.user).subscribe((data: any) => {
+      this.loader = false;
+      if (data.status) {
+        this.router.navigate(['login']);
+      } else {
         this.error = data.message;
       }
     },
-    (responseError:any) => {
+      (responseError: any) => {
         this.error = responseError.error.message;
-        this.loader=false;
+        this.loader = false;
       }
     );
   }

@@ -10,7 +10,7 @@ import { StockPriceService } from 'src/app/service/stock-price.service';
   styleUrls: ['./add-company.component.css']
 })
 export class AddCompanyComponent implements OnInit {
-  addCompany: FormGroup|any ;
+  addCompany: FormGroup | any;
   stockPriceForm: FormGroup | any;
   stockExchangeList: any;
   stockPriceList: any = [];
@@ -73,14 +73,18 @@ export class AddCompanyComponent implements OnInit {
               "companyCode": req.code,
               "stockExchangeCode": data.stockExchangeCode
             },
-            "stockPrice":Number( data.stockPrice)
+            "stockPrice": Number(data.stockPrice)
           });
       });
       req.stockPrice = reqStockPriceList;
       this.companyService.registerCompany(req).subscribe((data: any) => {
         this.router.navigate(['company']);
       }, (error: any) => {
-        this.errorMsg = error.message;
+        if (error.status == 500) {
+          this.errorMsg = "System is currently unavailable Please try again later.";
+        }
+        else
+          this.errorMsg = error.message;
       })
     } else {
       this.errorMsg = "All fields are required"

@@ -1,28 +1,40 @@
-<div class="container-fluid col-lg-4 col-md-6 col-sm-12 mt-5 pt-5 p-5 mb-5">
-    <div class="card border border-info rounded p-4 ">
-        <h2 class="text-center ">Login</h2>
-        <div class="alert alert-danger " *ngIf="!formValidation "> Invalid emailId/Password</div>
-        <form [formGroup]="loginForm " (ngSubmit)="login() ">
-            <div class="form-row ">
-                <div class="form-group col-sm-12 col-lg-12 ">
-                    <label for="emailId">Email Id</label>
-                    <input type="text" class="form-control " id="emailId" placeholder="Enter email Id" formControlName="emailId">
-                    <div class="text-danger" *ngIf="emailId.touched && !emailId.valid"><small> Email Id is required</small></div>
+<div class="container mt-4 justify-content-center d-flex">
+    <div class="card">
+        <h4 class="ml-3 mt-5">Login</h4>
+        <div class="container-fluid mt-2">
+            <div class="text-danger" *ngIf="error != ''">{{error}}</div>
+            <form [formGroup]="loginForm">
+                <div class="form-row">
+                    <div class="form-group col-sm-12 col-lg-12">
+                        <label for="emailId">Email Id</label>
+                        <input type="text" class="form-control " id="emailId" placeholder="Enter email Id"
+                            formControlName="emailId">
+                        <div *ngIf="(emailId.touched || emailId.dirty)">
+                            <small *ngIf="emailId.invalid && emailId.errors?.required" class="text-danger">Email Id
+                                is
+                                required.</small>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="form-row ">
-                <div class="form-group col-sm-12 col-lg-12 ">
-                    <label for="inputPassword">Password</label>
-                    <input type="password" class="form-control " id="inputPassword " placeholder="Enter Password " formControlName="password">
-                    <div class="text-danger " *ngIf="password.touched && !password.valid "><small> Password is required</small></div>
+                <div class="form-row">
+                    <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                        <label for="inputPassword">Password</label>
+                        <input type="password" class="form-control " id="inputPassword " placeholder="Enter Password "
+                            formControlName="password">
+                        <div *ngIf="(password.touched || password.dirty)">
+                            <small *ngIf="password.invalid  && password.errors?.required" class="text-danger">Password
+                                is required.</small>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="form-row ">
-                <div class=" d-flex form-group col-sm-12 col-lg-12 ">
-                    <button class="btn color" id="login">Login</button>
-                    <div class="ml-auto ">New here? <a routerLink="/signup">Signup</a></div>
+                <div class="form-row">
+                    <div class=" d-flex form-group col-sm-12 col-lg-12 ">
+                        <button type="submit" class="btn btn-primary " (click)=login()
+                            [disabled]="!loginForm.valid">Login</button>
+                        <div class="ml-auto ">New here? <a routerLink="/signup">Signup</a></div>
+                    </div>
                 </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 </div>

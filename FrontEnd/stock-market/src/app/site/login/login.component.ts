@@ -12,7 +12,6 @@ import { UserAuthService } from 'src/app/service/user-auth.service';
 export class LoginComponent implements OnInit {
 
   loginForm: any;
-  formValidation: boolean = true;
   error: String = '';
   loader: boolean = false;
   constructor(private formbuilder: FormBuilder, private router: Router, private authenticationService: AuthenticationService, private userAuthService: UserAuthService) {
@@ -36,20 +35,22 @@ export class LoginComponent implements OnInit {
   login() {
     if (this.loginForm.valid) {
       this.authenticationService.authenticate(this.emailId.value, this.password.value).subscribe((data: any) => {
-        this.formValidation = true;
-        this.userAuthService.setUser(data.user);
-        this.authenticationService.setToken(data.token);
-        this.userAuthService.setLog(true);
+        if (data.status == "true") {
+          this.userAuthService.setUser(data.user);
+          this.authenticationService.setToken(data.token);
+          this.userAuthService.setLog(true);
           this.router.navigate(["company"]);
+        } else {
+          this.error = data.message;
+        }
       },
         (error: any) => {
-          this.formValidation = false;
           if (error.status == 401) {
             this.error = "Invalid email Id/Password";
           }
         });
     } else {
-      this.error="Both fields are required"
+      this.error = "Both fields are required"
     }
   }
 

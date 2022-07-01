@@ -9,7 +9,7 @@ import { UserAuthService } from 'src/app/service/user-auth.service';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
-  username: string|undefined;
+  username: string | undefined;
   constructor(private userAuthService: UserAuthService, private router: Router, private authenticationService: AuthenticationService) { }
 
   ngOnInit() {

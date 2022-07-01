@@ -55,9 +55,9 @@ public class CompanyController {
 	}
 	
 	@GetMapping("/search/{searchString}")
-	public List<String> getMatchingCompanyCodes(@PathVariable String searchString) {
+	public List<CompanyDetails> getMatchingCompanies(@PathVariable String searchString) {
 		logger.info("Request received for getMatchingCompanyCodes, :: searchString:{}",searchString);
-		return companyService.getMatchingCompanyCodes(searchString);
+		return companyService.getMatchingCompanies(searchString);
 	}
 
 }

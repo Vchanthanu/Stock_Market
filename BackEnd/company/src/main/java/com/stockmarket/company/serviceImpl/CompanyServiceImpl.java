@@ -118,7 +118,7 @@ public class CompanyServiceImpl implements CompanyService {
 				companies.stream().forEach(company -> {
 					getCompanyStockPrice(stockExchangeList, company);
 				});
-				logger.info("End of  getAllCompanies method in CompanyServiceImpl");
+
 				return companies;
 			} else {
 				throw new NoDataFoundException("No Companies available");
@@ -198,14 +198,18 @@ public class CompanyServiceImpl implements CompanyService {
 	}
 
 	@Override
-	public List<String> getMatchingCompanyCodes(String searchString) {
+	public List<CompanyDetails> getMatchingCompanies(String searchString) {
 		try {
-			logger.info("Inside getMatchingCompanyCodes method in CompanyServiceImpl");
+			logger.info("Inside getMatchingCompanies method in CompanyServiceImpl");
 			Query query = new Query();
 			query.addCriteria(Criteria.where("code").regex(searchString.trim(), "i"));
-			List<String> companyCodes = mongoTemplate.findDistinct(query, "code", "Company", String.class);
-			if (companyCodes.size() > 0) {
-				return companyCodes;
+			List<CompanyDetails> companyDetails = mongoTemplate.find(query, CompanyDetails.class);
+			if (companyDetails.size() > 0) {
+				List<StockExchange> stockExchangeList = mongoStockExchangeRepository.findAll();
+				companyDetails.stream().forEach(company -> {
+					getCompanyStockPrice(stockExchangeList, company);
+				});
+				return companyDetails;
 
 			} else {
 				throw new NoDataFoundException("No Data available for the corresponding search");
@@ -215,7 +219,7 @@ public class CompanyServiceImpl implements CompanyService {
 		} catch (NoDataFoundException ex) {
 			throw ex;
 		} catch (Exception ex) {
-			logger.error("Exception in getMatchingCompanyCodes method." + ex.getMessage());
+			logger.error("Exception in getMatchingCompanies method." + ex.getMessage());
 			throw new ApplicationServiceException(
 					"Oops Something unexpected happened.Please try again later. Error: " + ex.getMessage());
 		}

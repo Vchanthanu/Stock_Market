@@ -5,3 +5,12 @@
 .color {
     background-color: #2790f3;
 }
+.card {
+    margin: 0 auto;
+    float: none;
+    margin-bottom: 10px; 
+    width: 40rem;
+}
+body {
+    background: #eee
+}
