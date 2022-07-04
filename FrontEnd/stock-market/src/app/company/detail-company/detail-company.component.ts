@@ -84,9 +84,9 @@ export class DetailCompanyComponent implements OnInit {
 
   gridConfig() {
     this.columnDefs = [
-      { headerName: 'Updated Date', valueGetter: (params: any) => { return this.pipe.transform(params.data.priceUpdatedDate, 'dd/MM/yyyy HH:mm:ss') } },
-      { headerName: 'Price', field: 'stockPrice' },
       { headerName: 'Stock Exchange', field: "stockExchange.name" },
+      { headerName: 'Price', field: 'stockPrice' },
+      { headerName: 'Updated Date', valueGetter: (params: any) => { return this.pipe.transform(params.data.priceUpdatedDate, 'dd/MM/yyyy HH:mm:ss') } },
     ];
     this.defaultColDef = {
       sortable: true
@@ -104,7 +104,5 @@ export class DetailCompanyComponent implements OnInit {
     })
   }
 
-  previous(){
-    this.router.navigate(['company']);
-  }
+
 }
