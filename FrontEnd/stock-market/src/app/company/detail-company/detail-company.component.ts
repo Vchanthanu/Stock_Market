@@ -19,6 +19,7 @@ export class DetailCompanyComponent implements OnInit {
   stockExchangeList: any;
   errorMsg = '';
   stockPriceList: any=[];
+  isAdded:boolean=false;
   constructor(private router: Router, private companyService: CompanyService, private stockService: StockPriceService, private pipe: DatePipe) { }
 
   ngOnInit(): void {
@@ -74,9 +75,11 @@ export class DetailCompanyComponent implements OnInit {
           "stockPrice": Number(this.stockPriceForm.get('stockPrice').value)
         }]
       this.stockService.addStockPrice(req).subscribe((data: any) => {
+        this.isAdded=true;
         this.stockPriceForm.reset();
         this.getCompanyDetail();
       })
+      
     } else {
       this.errorMsg = "Both fields are required";
     }
