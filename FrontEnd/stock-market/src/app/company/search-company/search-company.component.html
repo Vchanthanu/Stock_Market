@@ -6,7 +6,11 @@
                 <div class="col-sm-8"><input type="text" class="form-control " id="company"
                         placeholder="Search by Company Code" (input)="onKeypressEvent($event)"></div>
                 <div class="col-sm-2">
-                    <button type="button" class="btn btn-outline-dark" routerLink="/addCompany">Add Company</button>
+                    <!-- <button type="button" class="btn btn-outline-dark" routerLink="/addCompany">Add Company</button> -->
+                    <!-- <button type="button" class="btn-btn-dark" data-toggle="modal" data-target="#exampleModalCenter">
+                        Add Company
+                    </button> -->
+                    <button class="btn-btn-dark" (click)="addCompany()"> Add Company</button>
                 </div>
             </div>
         </div>
@@ -14,10 +18,9 @@
             <div class="row">
                 <div class="col-sm-1"></div>
                 <div class="col-sm-10">
-                    <ag-grid-angular style=" width:79% ;height: 300px" class="ag-theme-alpine"
-                        [columnDefs]="columnDefs" [defaultColDef]="defaultColDef" [rowData]="rowData" [pagination]=true
-                        [paginationPageSize]="20" (cellMouseOver)="onMouseOver($event)"
-                        (gridReady)="onGridReady($event)">
+                    <ag-grid-angular style=" width:79% ;height: 300px" class="ag-theme-alpine" [columnDefs]="columnDefs"
+                        [defaultColDef]="defaultColDef" [rowData]="rowData" [pagination]=true [paginationPageSize]="20"
+                        (cellMouseOver)="onMouseOver($event)" (gridReady)="onGridReady($event)">
                     </ag-grid-angular>
                 </div>
                 <div class="col-sm-1"></div>

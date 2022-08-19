@@ -136,7 +136,7 @@ public class StockpriceServiceImpl implements StockpriceService {
 					stockPriceDto.setMax(priceList.get(priceList.size() - 1));
 					stockPriceDto
 							.setAverage((float) priceList.stream().mapToDouble(price -> price).average().orElse(0.0));
-					stockPriceDto.setPriceList(priceList);
+					stockPriceDto.setPriceList(stockPriceList);
 					return stockPriceDto;
 
 				}

@@ -2,17 +2,19 @@ package com.stockmarket.stockprice.dto;
 
 import java.util.List;
 
+import com.stockmarket.mongo.model.StockPriceDetails;
+
 public class StockPriceDto {
-	List<Float> priceList;
+	List<StockPriceDetails> priceList;
 	float min;
 	float max;
 	float average;
 
-	public List<Float> getPriceList() {
+	public List<StockPriceDetails> getPriceList() {
 		return priceList;
 	}
 
-	public void setPriceList(List<Float> priceList) {
+	public void setPriceList(List<StockPriceDetails> priceList) {
 		this.priceList = priceList;
 	}
 

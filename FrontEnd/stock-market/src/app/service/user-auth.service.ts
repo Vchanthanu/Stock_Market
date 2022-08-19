@@ -5,16 +5,9 @@ import { Injectable } from '@angular/core';
 })
 export class UserAuthService {
   loggedIn: boolean = false;
-  role: string | undefined;
   user: string | undefined;
   constructor() { }
 
-  public setRole(role: string) {
-    this.role = role;
-  }
-  public getRole() {
-    return this.role;
-  }
   public setUser(user: string) {
     this.user = user;
   }

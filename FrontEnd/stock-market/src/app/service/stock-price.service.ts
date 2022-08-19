@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { AuthenticationService } from './authentication.service';
@@ -12,7 +12,7 @@ export class StockPriceService {
   getAllStockExchageUrl = this.domainUrl + "get/stockExchange";
   addStockPriceUrl = this.domainUrl + "add";
   getStockPriceByCompanyCodeUrl = this.domainUrl + "get/"
-  constructor(private http: HttpClient,private auth:AuthenticationService) { }
+  constructor(private http: HttpClient, private auth: AuthenticationService) { }
 
   getAllStockExchage() {
     const httpOptions = {
@@ -21,7 +21,7 @@ export class StockPriceService {
         'Authorization': 'Bearer ' + this.auth.getToken()
       })
     };
-    return this.http.get(this.getAllStockExchageUrl,httpOptions);
+    return this.http.get(this.getAllStockExchageUrl, httpOptions);
   }
   addStockPrice(req: any) {
     const httpOptions = {
@@ -30,16 +30,30 @@ export class StockPriceService {
         'Authorization': 'Bearer ' + this.auth.getToken()
       })
     };
-    return this.http.post(this.addStockPriceUrl, req,httpOptions)
+    return this.http.post(this.addStockPriceUrl, req, httpOptions)
   }
-  
-  getStockPrice(req:any) {
+
+  getStockPrice(req: any) {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + this.auth.getToken()
       })
     };
-    return this.http.get(this.getStockPriceByCompanyCodeUrl+req.code,httpOptions)
+    return this.http.get(this.getStockPriceByCompanyCodeUrl + req.code, httpOptions)
+  }
+  getStockPriceBasedOnDate(startDate: any, endDate: any, stockExchangeCode: string, companyCode: string) {
+    console.log("inside get getStockPriceBasedOnDate");
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + this.auth.getToken()
+      }),
+      params: new HttpParams().set("stockExchangeCode", stockExchangeCode).set("fromDate", startDate).
+        set("toDate", endDate)
+    };
+    
+
+    return this.http.get(this.getStockPriceByCompanyCodeUrl + companyCode, httpOptions)
   }
 }

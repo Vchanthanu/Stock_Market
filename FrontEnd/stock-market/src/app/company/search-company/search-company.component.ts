@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ColDef } from 'ag-grid-community';
 import { CellLinkComponent } from 'src/app/common/cell-link/cell-link.component';
 import { CompanyService } from 'src/app/service/company.service';
+import { AddCompanyComponent } from '../add-company/add-company.component';
+import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 
 @Component({
   selector: 'app-search-company',
@@ -13,7 +15,8 @@ export class SearchCompanyComponent implements OnInit {
   public defaultColDef: any;
   public rowData: any = [];
   public error: string = '';
-  constructor(private companyService: CompanyService) { }
+  modalRef: MdbModalRef<AddCompanyComponent> | null = null;
+  constructor(private companyService: CompanyService, private modalService: MdbModalService) { }
 
   ngOnInit(): void {
     this.gridConfig();
@@ -39,7 +42,7 @@ export class SearchCompanyComponent implements OnInit {
       { headerName: 'Company Code', field: 'code' },
       { headerName: 'Company Name', field: 'name' },
       { headerName: 'CEO', field: 'ceo' },
-      { headerName: 'Stock Exchange', valueGetter: (params: any) => { return params.data.stockPrice[0].stockExchange.name } },
+      { headerName: 'Stock Exchange', valueGetter: (params: any) => { return params.data.stockPrice[0].stockExchange.code } },
       { headerName: "Last Trade Price", valueGetter: (params: any) => { return params.data.stockPrice[0].stockPrice } },
       { headerName: "Action", cellRenderer: CellLinkComponent }
     ];
@@ -74,5 +77,10 @@ export class SearchCompanyComponent implements OnInit {
           }
         });
     }
+  }
+  addCompany() {
+    this.modalRef = this.modalService.open(AddCompanyComponent, {
+      modalClass: 'modal-dialog-scrollable'
+    })
   }
 }

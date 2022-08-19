@@ -1,161 +1,184 @@
-<div class="container-fluid  bg-secondary width=100%">
-    <h2 class="text-center">{{company?.name}}</h2>
-    <div class="row">
-        <div class="col-sm-6 mt-2">
-            <div class="row">
-                <div class="col-sm-5 font-weight-bold ">Company Code : </div>
-                <div class="col-sm-5 ">{{company?.code}}</div>
-            </div>
-        </div>
-        <div class="col-sm-6 mt-2">
-            <div class="row">
-                <div class="col-sm-5 font-weight-bold">CEO Name : </div>
-                <div class="col-sm-5">{{company?.ceo}}</div>
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="row">
-                <div class="col-sm-5 font-weight-bold">Turnover : </div>
-                <div class="col-sm-5">{{company?.turnover}}</div>
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="row">
-                <div class="col-sm-5 font-weight-bold">Website : </div>
-                <div class="col-sm-5">{{company?.website}}</div>
-            </div>
-        </div>
-
-    </div>
-    <div class="row mt-1 table-responsive justify-content-center">
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Stock Exchange </th>
-                    <th>Stock Price</th>
-                    <th>Last Updated Date</th>
-                </tr>
-            </thead>
-            <tbody *ngFor="let price of company?.stockPrice">
-                <tr>
-                    <td>{{price?.stockExchange.name}}</td>
-                    <td>{{price?.stockPrice}}</td>
-                    <td>{{price?.priceUpdatedDate |date:'dd/MM/yyyy HH:mm:ss'}}</td>
-                </tr>
-            </tbody>
-        </table>
-
-    </div>
-    <div class="row mt-3">
-        <div class="col-sm-12 text-center">
-            <button type="button" class="btn-btn-dark" data-toggle="modal" data-target="#exampleModalCenter">
-                Add Stock Price
-            </button>
-            <button type="button" (click)="deleteCompany()" class="btn-btn-dark ml-3">Delete Company</button>
-        </div>
-    </div>
-</div>
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-    aria-hidden="true">
-    
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="alert alert-success" *ngIf=isAdded>
-                <strong>StockPrice Added Successfully!</strong>
-            </div>
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Add Stock Price</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form [formGroup]="stockPriceForm">
-                    <div class="form-row">
-                        <div class="form-group col-sm-12 col-lg-12">
-
-                            <label class="col-sm-4" for="stockExchangeCode">Stock Exchange <span
-                                    class="text-danger">*</span></label>
-                            <div class="col-sm-8">
-                                <select type="text" class=" form-control" id="stockExchangeCode"
-                                    formControlName="stockExchangeCode">
-                                    <option value="null">---Select---</option>
-                                    <option *ngFor="let ex of stockExchangeList" [value]="ex?.code">
-                                        {{ex?.name}}
-                                    </option>
-                                </select>
-                                <small
-                                    *ngIf="(stockExchangeCode.invalid && (stockExchangeCode.touched || stockExchangeCode.dirty) )&& stockExchangeCode.errors.required"
-                                    class="text-danger">Stock Exchange Code required.</small>
-                            </div>
-
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-sm-12 col-md-12 col-lg-12">
-
-                            <label class="col-sm-4" for="stockPrice">Stock Price <span
-                                    class="text-danger">*</span></label>
-                            <div class="col-sm-8">
-                                <input type="text" class="col-sm-10 form-control" id="stockPrice"
-                                    formControlName="stockPrice" placeholder="Enter Stock Price">
-                                <small
-                                    *ngIf="(stockPrice.invalid && (stockPrice.touched || stockPrice.dirty) )&& stockPrice.errors.required"
-                                    class="text-danger">Stock Price is required.</small>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" (click)="onAddStockPrice()">Submit</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="container-fluid  width=100%">
-    <div class="form-row mt-3">
-        <div class="form-group col-sm-12 col-md-3 col-lg-3">
-            <div class="input-append date" id="dp3" data-date="12-02-2012" data-date-format="yyyy-MM-dd">
-                <input class="span2" size="16" type="text" value="12-02-2012">
-                <span class="add-on"><i class="icon-th"></i></span>
-            </div>
-        </div>
-        <div class="form-group col-sm-12 col-md-3 col-lg-3">
-            <input type="date" id="datePicker" placeholder="End Date">
-        </div>
-        <div class="form-group col-sm-12 col-md-2 col-lg-2" *ngFor="let price of company?.stockPrice">
-            <!-- <div class="form-check" > -->
-            <input type="radio" name="optradio" value="option">{{price?.stockExchange.code}}
-            <label class="form-check-label" for="radio1"></label>
-            <!-- </div> -->
-        </div>
-        <div class="form-group col-sm-12 col-md-3 col-lg-3">
-            <button type="submit" class="btn-btn-dark mt-3">View Stock Price</button>
-        </div>
-    </div>
-
-</div>
-<div class="container-fluid mt-4 justify-content-center" style="width:100%">
-
-    <div class="form-group col-sm-12 ">
+<div class="container align-center">
+    <div class="text-danger" *ngIf="errorMsg != ''">{{errorMsg}}</div>
+    <div class="container  border border-5 border-dark m-2  py-3  width=50%">
+        <h2 class="text-center">{{company?.name}}</h2>
         <div class="row">
-            <div class="col-sm-1"></div>
-            <div class="col-sm-10">
-                <ag-grid-angular style="width:100% ;height: 300px" class="ag-theme-alpine" [columnDefs]="columnDefs"
-                    [defaultColDef]="defaultColDef" [rowData]="rowData" [pagination]=true [paginationPageSize]="20"
-                    (gridReady)="onGridReady($event)">
-                </ag-grid-angular>
+            <div class="col-sm-6  mt-2">
+                <div class="row">
+                    <div class="col-sm-6  font-weight-bold ">Company Code : </div>
+                    <div class="col-sm-6 ">{{company?.code}}</div>
+                </div>
             </div>
-            <div class="col-sm-1"></div>
+            <div class="col-sm-6 mt-2 ">
+                <div class="row">
+                    <div class="col-sm-6 font-weight-bold">CEO Name : </div>
+                    <div class="col-sm-6">{{company?.ceo}}</div>
+                </div>
+            </div>
+            <div class="col-sm-6 ">
+                <div class="row">
+                    <div class="col-sm-6 font-weight-bold">Turnover : </div>
+                    <div class="col-sm-6">{{company?.turnover}}</div>
+                </div>
+            </div>
+            <div class="col-sm-6 ">
+                <div class="row">
+                    <div class="col-sm-6 font-weight-bold">Website : </div>
+                    <div class="col-sm-6">{{company?.website}}</div>
+                </div>
+            </div>
+
         </div>
+        <div class="row mt-2 pl-3 table-responsive justify-content-center">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Stock Exchange </th>
+                        <th>Stock Price</th>
+                        <th>Last Updated Date</th>
+                    </tr>
+                </thead>
+                <tbody *ngFor="let price of company?.stockPrice">
+                    <tr>
+                        <td>{{price?.stockExchange.name}}</td>
+                        <td>{{price?.stockPrice}}</td>
+                        <td>{{price?.priceUpdatedDate |date:'dd/MM/yyyy HH:mm:ss'}}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+        <div class="row mt-3">
+            <div class="col-sm-12 text-center">
+                <button type="button" class="btn-btn-dark" data-toggle="modal" data-target="#exampleModalCenter">
+                    Add Stock Price
+                </button>
+                <button type="button" (click)="deleteCompany()" class="btn-btn-dark ml-3">Delete Company</button>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="alert alert-success" *ngIf=isAdded>
+                    <strong>StockPrice Added Successfully!</strong>
+                </div>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Add Stock Price</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form [formGroup]="stockPriceForm">
+                        <div class="form-row">
+                            <div class="form-group col-sm-12 col-lg-12">
+
+                                <label class="col-sm-4" for="stockExchangeCode">Stock Exchange <span
+                                        class="text-danger">*</span></label>
+                                <div class="col-sm-8">
+                                    <select type="text" class=" form-control" id="stockExchangeCode"
+                                        formControlName="stockExchangeCode">
+                                        <option value="null">---Select---</option>
+                                        <option *ngFor="let ex of stockExchangeList" [value]="ex?.code">
+                                            {{ex?.name}}
+                                        </option>
+                                    </select>
+                                    <small
+                                        *ngIf="(stockExchangeCode.invalid && (stockExchangeCode.touched || stockExchangeCode.dirty) )&& stockExchangeCode.errors.required"
+                                        class="text-danger">Stock Exchange Code required.</small>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-sm-12 col-md-12 col-lg-12">
+
+                                <label class="col-sm-4" for="stockPrice">Stock Price <span
+                                        class="text-danger">*</span></label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="col-sm-10 form-control" id="stockPrice"
+                                        formControlName="stockPrice" placeholder="Enter Stock Price">
+                                    <small
+                                        *ngIf="(stockPrice.invalid && (stockPrice.touched || stockPrice.dirty) )&& stockPrice.errors.required"
+                                        class="text-danger">Stock Price is required.</small>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" (click)="onAddStockPrice()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container  align-center ">
+        <form [formGroup]="viewStockPriceForm">
+            <div class="form-row mt-3">
+                <div class="form-group col-sm-12 col-md-3 col-lg-3">
+
+                    <input placeholder="From Date" class="form-control" id="startDate" formControlName="startDate"
+                        type="text" onfocus="(this.type='date')">
+                    <!-- <small
+                        *ngIf="(startDate.invalid && (startDate.touched || startDate.dirty) )&& startDate.errors.required"
+                        class="text-danger">From Date is required.</small> -->
+                </div>
+                <div class="form-group col-sm-12 col-md-3 col-lg-3">
+                    <input placeholder="To Date" class="form-control" id="endDate" formControlName="endDate" type="text"
+                        onfocus="(this.type='date')">
+                    <!-- <small *ngIf="(endDate.invalid && (endDate.touched || endDate.dirty) )&& endDate.errors.required"
+                        class="text-danger">To Date is required.</small> -->
+                </div>
+                <div class="form-group col-sm-12 col-md-3 col-lg-3">
+
+                    <select formControlName="stockExchangeCode" id="stockExchangeCode" class="form-control">
+                        <option value="null">Select stockExchange</option>
+                        <option *ngFor="let price of company?.stockPrice">{{price?.stockExchange.code}}</option>
+                    </select>
+                    <small
+                        *ngIf="(stockExchangeCode.invalid && (stockExchangeCode.touched || stockExchangeCode.dirty) )&& stockExchangeCode.errors.required"
+                        class="text-danger">Please select StockExchangeCode</small>
+                </div>
+                <div class="form-group col-sm-12 col-md-3 col-lg-3">
+                    <button type="button" class="btn-btn-dark mt-1" (click)="getStockPriceBasedOnDate()">View Stock
+                        Price</button>
+                </div>
+            </div>
+        </form>
 
     </div>
-  
-    <!-- <div class="form-group col-sm-12 pt-2 text-center">
-        <button type="button" class="btn btn-outline-dark" routerLink="company">Previous</button>
+    <div class="container-fluid mt-4 justify-content-center" style="width:100%">
 
-    </div> -->
+        <div class="form-group col-sm-12 " *ngIf="rowData.length>0">
+            <div class="row">
+                <div class="col-sm-1"></div>
+                <div class="col-sm-10">
+                    <ag-grid-angular style="width:100% ;height: 300px" class="ag-theme-alpine" [columnDefs]="columnDefs"
+                        [defaultColDef]="defaultColDef" [rowData]="rowData" [pagination]=true [paginationPageSize]="20"
+                        (gridReady)="onGridReady($event)">
+                    </ag-grid-angular>
+                </div>
+                <div class="col-sm-1"></div>
+            </div>
+            <div class="row px-5" *ngIf="rowData.length>0">
+
+
+                <span class="col-sm-4  font-weight-bold ">Min: {{stockPriceData?.min}} </span>
+
+                <span class="col-sm-4 font-weight-bold">Max: {{stockPriceData?.max}}</span>
+
+                <span class="col-sm-4 font-weight-bold">Average: {{stockPriceData?.average}} </span>
+
+            </div>
+
+        </div>
+      
+            <button type="button" class="btn btn-outline-dark" routerLink="/company">Previous</button>
+       
+    </div>
 </div>
