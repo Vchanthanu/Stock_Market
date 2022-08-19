@@ -3,7 +3,7 @@ import { ColDef } from 'ag-grid-community';
 import { CellLinkComponent } from 'src/app/common/cell-link/cell-link.component';
 import { CompanyService } from 'src/app/service/company.service';
 import { AddCompanyComponent } from '../add-company/add-company.component';
-import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
+// import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 
 @Component({
   selector: 'app-search-company',
@@ -15,8 +15,10 @@ export class SearchCompanyComponent implements OnInit {
   public defaultColDef: any;
   public rowData: any = [];
   public error: string = '';
-  modalRef: MdbModalRef<AddCompanyComponent> | null = null;
-  constructor(private companyService: CompanyService, private modalService: MdbModalService) { }
+  // modalRef: MdbModalRef<AddCompanyComponent> | null = null;
+  constructor(private companyService: CompanyService
+    // , private modalService: MdbModalService
+    ) { }
 
   ngOnInit(): void {
     this.gridConfig();
@@ -79,8 +81,8 @@ export class SearchCompanyComponent implements OnInit {
     }
   }
   addCompany() {
-    this.modalRef = this.modalService.open(AddCompanyComponent, {
-      modalClass: 'modal-dialog-scrollable'
-    })
+    // this.modalRef = this.modalService.open(AddCompanyComponent, {
+    //   modalClass: 'modal-dialog-scrollable'
+    // })
   }
 }
