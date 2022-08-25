@@ -128,21 +128,22 @@
 
 
 
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-    aria-hidden="true">
+<!-- <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true"> -->
 
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="alert alert-success" *ngIf=isAdded>
+    <!-- <div class="modal-dialog modal-dialog-centered" >
+        <div class="modal-content"> -->
+            <!-- <div class="alert alert-success" *ngIf="isAdded">
                 <strong>Company Added Successfully!</strong>
-            </div>
+            </div> -->
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Add Company</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <h5 class="modal-title" >Add Company</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="activeModal.close()">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body center">
+                <div class="alert alert-danger" *ngIf="errorMsg != ''">{{errorMsg}}</div>
                 <form [formGroup]="addCompany">
                     <div class="form-row">
                         <div class="form-group col-sm-6">
@@ -209,8 +210,8 @@
                         </div>
                     </div>
                 </form>
-                <div class="card">
-                    <div class="container-fluid">
+                <div class="border border-1 col-sm-12">
+                    <!-- <div class="container-fluid"> -->
                         <form [formGroup]="stockPriceForm">
                             <div class="form-row pt-2">
                                 <div class="form-group col-sm-5">
@@ -263,13 +264,13 @@
                                 </tbody>
                             </table>
                         </div>
-                    </div>
+                    <!-- </div> -->
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="activeModal.close()">Close</button>
                 <button type="button" class="btn btn-primary" (click)="onSubmit()">Submit</button>
             </div>
-        </div>
-    </div>
-</div>
+        <!-- </div>
+    </div> -->
+<!-- </div> -->

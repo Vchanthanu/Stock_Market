@@ -15,6 +15,7 @@ import { AddCompanyComponent } from './company/add-company/add-company.component
 import { CellLinkComponent } from './common/cell-link/cell-link.component';
 import { DetailCompanyComponent } from './company/detail-company/detail-company.component';
 import { DatePipe } from '@angular/common';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { DatePipe } from '@angular/common';
     ReactiveFormsModule,
     FormsModule,
     AgGridModule,
+    
     
 
     // RouterModule.forRoot(routes),

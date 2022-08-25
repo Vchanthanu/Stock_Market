@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { CompanyService } from 'src/app/service/company.service';
 import { StockPriceService } from 'src/app/service/stock-price.service';
 
@@ -15,7 +16,7 @@ export class AddCompanyComponent implements OnInit {
   stockExchangeList: any;
   stockPriceList: any = [];
   errorMsg = '';
-  constructor(private stock: StockPriceService, private companyService: CompanyService, private router: Router) { }
+  constructor(public activeModal: NgbActiveModal, private stock: StockPriceService, private companyService: CompanyService, private router: Router) { }
 
   ngOnInit(): void {
     this.declareForm();
@@ -56,7 +57,7 @@ export class AddCompanyComponent implements OnInit {
     if (this.stockPriceForm.valid) {
       this.stockPriceList.push(this.stockPriceForm.value);
     } else {
-      this.errorMsg = "Both fields are required";
+      this.errorMsg = "Stock Exchange and Stock Price are required";
     }
   }
 
@@ -78,7 +79,9 @@ export class AddCompanyComponent implements OnInit {
       });
       req.stockPrice = reqStockPriceList;
       this.companyService.registerCompany(req).subscribe((data: any) => {
-        this.router.navigate(['company']);
+        // this.router.navigate(['company']);
+        this.activeModal.close();
+
       }, (error: any) => {
         if (error.status == 500) {
           this.errorMsg = "System is currently unavailable Please try again later.";

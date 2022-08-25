@@ -14,3 +14,7 @@
 body {
     background: #eee
 }
+.modal-lg-class .modal-dialog{
+    width: 85%;
+    max-width: 90%;
+}
