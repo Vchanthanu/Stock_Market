@@ -26,6 +26,6 @@ export class HeaderComponent implements OnInit {
   onSignOut() {
     this.userAuthService.setLog(false);
     this.authenticationService.setToken('');
-    this.router.navigate(['']);
+    this.router.navigate(['login']);
   }
 }

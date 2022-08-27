@@ -23,6 +23,7 @@ export class DetailCompanyComponent implements OnInit {
   isAdded: boolean = false;
   public stockPriceData: any;
   public noRowsTemplate: any;
+  loader: boolean = false;
   constructor(private router: Router, private companyService: CompanyService, private stockService: StockPriceService, private pipe: DatePipe) { }
 
   ngOnInit(): void {
@@ -34,7 +35,9 @@ export class DetailCompanyComponent implements OnInit {
 
   getCompanyDetail() {
     let sessionCod: any = sessionStorage.getItem("companyCode");
+    this.loader = true;
     this.companyService.getCompanyByCode(JSON.parse(sessionCod)).subscribe((data: any) => {
+      this.loader = false;
       this.company = data;
       let companyExchangeList = data.stockPrice.map((sp: any) => sp.stockExchange.code);
       this.stockExchangeList.filter((ex: any) => companyExchangeList.includes(ex.code));
@@ -55,7 +58,7 @@ export class DetailCompanyComponent implements OnInit {
     this.viewStockPriceForm = new FormGroup({
       startDate: new FormControl(null, Validators.required),
       endDate: new FormControl(null, Validators.required),
-      stockExchangeCode: new FormControl(null, Validators.required)
+      stockExchangeCde: new FormControl(null, Validators.required)
 
     });
   }
@@ -63,14 +66,18 @@ export class DetailCompanyComponent implements OnInit {
   get stockExchangeCode() { return this.stockPriceForm.get('stockExchangeCode'); }
   get stockPrice() { return this.stockPriceForm.get('stockPrice'); }
 
-  getCompanyStockPrice(req?: any) {
-    if (req == null) {
-      req = { code: this.company.code }
-    }
-    this.stockService.getStockPrice(req).subscribe((data: any) => {
-      this.stockPriceList = data
-    });
-  }
+  get startDate() { return this.viewStockPriceForm.get('startDate'); }
+  get endDate() { return this.viewStockPriceForm.get('endDate'); }
+  get stockExchangeCde() { return this.viewStockPriceForm.get('stockExchangeCde'); }
+
+  // getCompanyStockPrice(req?: any) {
+  //   if (req == null) {
+  //     req = { code: this.company.code }
+  //   }
+  //   this.stockService.getStockPrice(req).subscribe((data: any) => {
+  //     this.stockPriceList = data
+  //   });
+  // }
 
   onAddStockPrice() {
     this.errorMsg = "";
@@ -83,10 +90,15 @@ export class DetailCompanyComponent implements OnInit {
           },
           "stockPrice": Number(this.stockPriceForm.get('stockPrice').value)
         }]
+      this.loader = true;
       this.stockService.addStockPrice(req).subscribe((data: any) => {
+        setTimeout(() => {
+          this.loader = false;
+        }, 5000);
         this.isAdded = true;
         this.stockPriceForm.reset();
         this.getCompanyDetail();
+        this.isAdded = false;
       })
 
     } else {
@@ -109,23 +121,26 @@ export class DetailCompanyComponent implements OnInit {
   }
 
   deleteCompany() {
+    this.loader = true;
     this.companyService.deleteCompany(this.company.code).subscribe((data: any) => {
+      this.loader = false;
       this.router.navigate(['company']);
     }, (error: any) => {
+      this.loader = false;
       this.errorMsg = error.message;
     })
   }
   getStockPriceBasedOnDate() {
-    console.log("inside get stockprice");
-    this.stockService.getStockPriceBasedOnDate(this.getDateString(this.viewStockPriceForm.get('startDate').value), this.getDateString(this.viewStockPriceForm.get('endDate').value), this.viewStockPriceForm.get('stockExchangeCode').value, this.company.code).subscribe((data: any) => {
+    this.loader = true;
+    this.stockService.getStockPriceBasedOnDate(this.getDateString(this.viewStockPriceForm.get('startDate').value), this.getDateString(this.viewStockPriceForm.get('endDate').value), this.viewStockPriceForm.get('stockExchangeCde').value, this.company.code).subscribe((data: any) => {
+      this.loader = false;
       this.stockPriceData = data;
       this.rowData = data.priceList;
-
     }, (error: any) => {
+      this.loader = false;
       if (error.status == 204) {
         this.noRowsTemplate =
-        `"<span">no rows to show</span>"`;
-
+          `"<span">no rows to show</span>"`;
       }
       this.errorMsg = error.message;
     })
@@ -137,11 +152,7 @@ export class DetailCompanyComponent implements OnInit {
     let formattedDate = this.pipe.transform(date, 'yyyy-MM-dd');
     if (formattedDate != undefined) {
       return formattedDate.toString();
-
     }
     return null;
-
   }
-
-
 }

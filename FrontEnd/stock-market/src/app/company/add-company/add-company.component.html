@@ -1,276 +1,138 @@
-<!-- <div class="container-fluid">
-    <h4>Add Company</h4>
-    <div class="text-danger" *ngIf="errorMsg != ''">{{errorMsg}}</div>
-    <div class="card">
-        <div class="container-fluid">
-            <form [formGroup]="addCompany">
-                <div class="form-row">
-                    <div class="form-group col-sm-6">
-                        <div class="row pt-2">
-                            <label class="col-sm-4" for="code">Company Code <span class="text-danger">*</span></label>
-                            <div class="col-sm-6">
-                                <input type="text" class="form-control" id="code" formControlName="code"
-                                    placeholder="Enter Company code">
-                                <small *ngIf="(code.invalid && (code.touched || code.dirty) )&& code.errors.required"
-                                    class="text-danger">Code is required.</small>
-                            </div>
+<div *ngIf="loader">
+    <img src="https://c.tenor.com/OzAxe6-8KvkAAAAj/blue_spinner.gif" class="center" style="width:50%">
+</div>
+<div *ngIf="!loader">
+    <div class="modal-header">
+        <h5 class="modal-title">Add Company</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="activeModal.close()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="addCompany">
+            <div class="form-row">
+                <div class="form-group col-sm-6">
+                    <div class="row pt-2">
+                        <label class="col-sm-4" for="code">Company Code <span class="text-danger">*</span></label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="code" formControlName="code"
+                                placeholder="Enter Company code">
+                            <small *ngIf="(code.invalid && (code.touched || code.dirty) )&& code.errors.required"
+                                class="text-danger">Code is required.</small>
                         </div>
                     </div>
-                    <div class="form-group col-sm-6">
-                        <div class="row pt-2">
-                            <label class="col-sm-4" for="name">Company Name <span class="text-danger">*</span></label>
-                            <div class="col-sm-6">
-                                <input type="text" class="form-control" id="name" formControlName="name"
-                                    placeholder="Enter Company Name">
-                                <small *ngIf="(name.invalid && (name.touched || name.dirty) )&& name.errors.required"
-                                    class="text-danger">Name is required.</small>
-                            </div>
+                </div>
+                <div class="form-group col-sm-6">
+                    <div class="row pt-2">
+                        <label class="col-sm-4" for="name">Company Name <span class="text-danger">*</span></label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="name" formControlName="name"
+                                placeholder="Enter Company Name">
+                            <small *ngIf="(name.invalid && (name.touched || name.dirty) )&& name.errors.required"
+                                class="text-danger">Name is required.</small>
                         </div>
                     </div>
-                    <div class="form-group col-sm-6">
+                </div>
+                <div class="form-group col-sm-6">
+                    <div class="row ">
+                        <label class="col-sm-4" for="ceo">CEO <span class="text-danger">*</span></label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="ceo" formControlName="ceo"
+                                placeholder="Enter CEO name">
+                            <small *ngIf="(ceo.invalid && (ceo.touched || ceo.dirty) )&& ceo.errors.required"
+                                class="text-danger">CEO is required.</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-sm-6">
+                    <div class="row ">
+                        <label class="col-sm-4" for="turnover">Turnover <span class="text-danger">*</span></label>
+                        <div class="col-sm-6">
+                            <input type="text" class=" form-control" id="turnover" formControlName="turnover"
+                                placeholder="Enter Turnover">
+                            <small
+                                *ngIf="(turnover.invalid && (turnover.touched || turnover.dirty) )&& turnover.errors.required"
+                                class="text-danger">Turnover is required.</small>
+                            <small *ngIf=" !turnover.errors?.required&&turnover.errors?.pattern"
+                                class="text-danger">Turn Over should be number
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-sm-6">
+                    <div class="row ">
+                        <label class="col-sm-4" for="website">Website <span class="text-danger">*</span></label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="website" formControlName="website"
+                                placeholder="Enter Website">
+                            <small
+                                *ngIf="(website.invalid && (website.touched || website.dirty) )&& website.errors.required"
+                                class="text-danger">Website is required.</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="border border-1 col-sm-12">
+            <form [formGroup]="stockPriceForm">
+                <div class="form-row pt-2">
+                    <div class="form-group col-sm-5">
                         <div class="row ">
-                            <label class="col-sm-4" for="ceo">CEO <span class="text-danger">*</span></label>
-                            <div class="col-sm-6">
-                                <input type="text" class="form-control" id="ceo" formControlName="ceo"
-                                    placeholder="Enter CEO name">
-                                <small *ngIf="(ceo.invalid && (ceo.touched || ceo.dirty) )&& ceo.errors.required"
-                                    class="text-danger">CEO is required.</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group col-sm-6">
-                        <div class="row ">
-                            <label class="col-sm-4" for="turnover">Turnover <span class="text-danger">*</span></label>
-                            <div class="col-sm-6">
-                                <input type="text" class=" form-control" id="turnover" formControlName="turnover"
-                                    placeholder="Enter Turnover">
+                            <label class="col-sm-4" for="stockExchangeCode">Stock Exchange <span
+                                    class="text-danger">*</span></label>
+                            <div class="col-sm-8">
+                                <select type="text" class=" form-control" id="stockExchangeCode"
+                                    formControlName="stockExchangeCode">
+                                    <option value="null">---Select---</option>
+                                    <option *ngFor="let ex of stockExchangeList" [value]="ex?.code">
+                                        {{ex?.name}}
+                                    </option>
+                                </select>
                                 <small
-                                    *ngIf="(turnover.invalid && (turnover.touched || turnover.dirty) )&& turnover.errors.required"
-                                    class="text-danger">Turnover is required.</small>
+                                    *ngIf="(stockExchangeCode.invalid && (stockExchangeCode.touched || stockExchangeCode.dirty) )&& stockExchangeCode.errors.required"
+                                    class="text-danger">Stock Exchange Code required.</small>
                             </div>
                         </div>
                     </div>
-                    <div class="form-group col-sm-6">
+                    <div class="form-group col-sm-5">
                         <div class="row ">
-                            <label class="col-sm-4" for="website">Website <span class="text-danger">*</span></label>
-                            <div class="col-sm-6">
-                                <input type="text" class="form-control" id="website" formControlName="website"
-                                    placeholder="Enter Website">
+                            <label class="col-sm-4" for="stockPrice">Stock Price <span
+                                    class="text-danger">*</span></label>
+                            <div class="col-sm-8">
+                                <input type="text" class="col-sm-10 form-control" id="stockPrice"
+                                    formControlName="stockPrice" placeholder="Enter Stock Price">
                                 <small
-                                    *ngIf="(website.invalid && (website.touched || website.dirty) )&& website.errors.required"
-                                    class="text-danger">Website is required.</small>
+                                    *ngIf="(stockPrice.invalid && (stockPrice.touched || stockPrice.dirty) )&& stockPrice.errors.required"
+                                    class="text-danger">Stock Price is required.</small>
+                                <small *ngIf=" !stockPrice.errors?.required&&stockPrice.errors?.pattern"
+                                    class="text-danger">Enter valid stock price
+                                </small>
                             </div>
                         </div>
+
+                    </div>
+                    <div class="form-group col-sm-2">
+                        <button type="button" (click)="onAddStockPrice()" class="btn btn-primary">Add</button>
                     </div>
                 </div>
             </form>
-            <div class="card">
-                <div class="container-fluid">
-                    <form [formGroup]="stockPriceForm">
-                        <div class="form-row pt-2">
-                            <div class="form-group col-sm-5">
-                                <div class="row ">
-                                    <label class="col-sm-4" for="stockExchangeCode">Stock Exchange <span
-                                            class="text-danger">*</span></label>
-                                    <div class="col-sm-8">
-                                        <select type="text" class=" form-control" id="stockExchangeCode"
-                                            formControlName="stockExchangeCode">
-                                            <option value="null">---Select---</option>
-                                            <option *ngFor="let ex of stockExchangeList" [value]="ex?.code">{{ex?.name}}
-                                            </option>
-                                        </select>
-                                        <small
-                                            *ngIf="(stockExchangeCode.invalid && (stockExchangeCode.touched || stockExchangeCode.dirty) )&& stockExchangeCode.errors.required"
-                                            class="text-danger">Stock Exchange Code required.</small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group col-sm-5">
-                                <div class="row ">
-                                    <label class="col-sm-4" for="stockPrice">Stock Price <span
-                                            class="text-danger">*</span></label>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="col-sm-10 form-control" id="stockPrice"
-                                            formControlName="stockPrice" placeholder="Enter Stock Price">
-                                        <small
-                                            *ngIf="(stockPrice.invalid && (stockPrice.touched || stockPrice.dirty) )&& stockPrice.errors.required"
-                                            class="text-danger">Stock Price is required.</small>
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div class="form-group col-sm-2">
-                                <button type="button" (click)="onAddStockPrice()" class="btn btn-primary">Add</button>
-                            </div>
-                        </div>
-                    </form>
-                    <div class="container col-sm-9 pt-2">
-                        <table *ngIf="stockPriceList.length > 0" class="table border overflow-auto p-2">
-                            <thead>
-                                <th>Stock Exchange</th>
-                                <th>Stock Price</th>
-                            </thead>
-                            <tbody *ngFor="let stock of stockPriceList">
-                                <td>{{stock.stockExchangeCode}}</td>
-                                <td>{{stock.stockPrice}}</td>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group col-sm-12 pt-2 text-center">
-                <button type="button" (click)="onSubmit()" class="btn btn-primary">Submit</button>
+            <div class="container col-sm-9 pt-2">
+                <table *ngIf="stockPriceList.length > 0" class="table border overflow-auto p-2">
+                    <thead>
+                        <th>Stock Exchange</th>
+                        <th>Stock Price</th>
+                    </thead>
+                    <tbody *ngFor="let stock of stockPriceList">
+                        <td>{{stock.stockExchangeCode}}</td>
+                        <td>{{stock.stockPrice}}</td>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
-
-</div> -->
-
-
-
-<!-- <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-    aria-hidden="true"> -->
-
-    <!-- <div class="modal-dialog modal-dialog-centered" >
-        <div class="modal-content"> -->
-            <!-- <div class="alert alert-success" *ngIf="isAdded">
-                <strong>Company Added Successfully!</strong>
-            </div> -->
-            <div class="modal-header">
-                <h5 class="modal-title" >Add Company</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="activeModal.close()">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body center">
-                <div class="alert alert-danger" *ngIf="errorMsg != ''">{{errorMsg}}</div>
-                <form [formGroup]="addCompany">
-                    <div class="form-row">
-                        <div class="form-group col-sm-6">
-                            <div class="row pt-2">
-                                <label class="col-sm-4" for="code">Company Code <span
-                                        class="text-danger">*</span></label>
-                                <div class="col-sm-6">
-                                    <input type="text" class="form-control" id="code" formControlName="code"
-                                        placeholder="Enter Company code">
-                                    <small
-                                        *ngIf="(code.invalid && (code.touched || code.dirty) )&& code.errors.required"
-                                        class="text-danger">Code is required.</small>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group col-sm-6">
-                            <div class="row pt-2">
-                                <label class="col-sm-4" for="name">Company Name <span
-                                        class="text-danger">*</span></label>
-                                <div class="col-sm-6">
-                                    <input type="text" class="form-control" id="name" formControlName="name"
-                                        placeholder="Enter Company Name">
-                                    <small
-                                        *ngIf="(name.invalid && (name.touched || name.dirty) )&& name.errors.required"
-                                        class="text-danger">Name is required.</small>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group col-sm-6">
-                            <div class="row ">
-                                <label class="col-sm-4" for="ceo">CEO <span class="text-danger">*</span></label>
-                                <div class="col-sm-6">
-                                    <input type="text" class="form-control" id="ceo" formControlName="ceo"
-                                        placeholder="Enter CEO name">
-                                    <small *ngIf="(ceo.invalid && (ceo.touched || ceo.dirty) )&& ceo.errors.required"
-                                        class="text-danger">CEO is required.</small>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group col-sm-6">
-                            <div class="row ">
-                                <label class="col-sm-4" for="turnover">Turnover <span
-                                        class="text-danger">*</span></label>
-                                <div class="col-sm-6">
-                                    <input type="text" class=" form-control" id="turnover" formControlName="turnover"
-                                        placeholder="Enter Turnover">
-                                    <small
-                                        *ngIf="(turnover.invalid && (turnover.touched || turnover.dirty) )&& turnover.errors.required"
-                                        class="text-danger">Turnover is required.</small>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group col-sm-6">
-                            <div class="row ">
-                                <label class="col-sm-4" for="website">Website <span class="text-danger">*</span></label>
-                                <div class="col-sm-6">
-                                    <input type="text" class="form-control" id="website" formControlName="website"
-                                        placeholder="Enter Website">
-                                    <small
-                                        *ngIf="(website.invalid && (website.touched || website.dirty) )&& website.errors.required"
-                                        class="text-danger">Website is required.</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-                <div class="border border-1 col-sm-12">
-                    <!-- <div class="container-fluid"> -->
-                        <form [formGroup]="stockPriceForm">
-                            <div class="form-row pt-2">
-                                <div class="form-group col-sm-5">
-                                    <div class="row ">
-                                        <label class="col-sm-4" for="stockExchangeCode">Stock Exchange <span
-                                                class="text-danger">*</span></label>
-                                        <div class="col-sm-8">
-                                            <select type="text" class=" form-control" id="stockExchangeCode"
-                                                formControlName="stockExchangeCode">
-                                                <option value="null">---Select---</option>
-                                                <option *ngFor="let ex of stockExchangeList" [value]="ex?.code">
-                                                    {{ex?.name}}
-                                                </option>
-                                            </select>
-                                            <small
-                                                *ngIf="(stockExchangeCode.invalid && (stockExchangeCode.touched || stockExchangeCode.dirty) )&& stockExchangeCode.errors.required"
-                                                class="text-danger">Stock Exchange Code required.</small>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group col-sm-5">
-                                    <div class="row ">
-                                        <label class="col-sm-4" for="stockPrice">Stock Price <span
-                                                class="text-danger">*</span></label>
-                                        <div class="col-sm-8">
-                                            <input type="text" class="col-sm-10 form-control" id="stockPrice"
-                                                formControlName="stockPrice" placeholder="Enter Stock Price">
-                                            <small
-                                                *ngIf="(stockPrice.invalid && (stockPrice.touched || stockPrice.dirty) )&& stockPrice.errors.required"
-                                                class="text-danger">Stock Price is required.</small>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <div class="form-group col-sm-2">
-                                    <button type="button" (click)="onAddStockPrice()"
-                                        class="btn btn-primary">Add</button>
-                                </div>
-                            </div>
-                        </form>
-                        <div class="container col-sm-9 pt-2">
-                            <table *ngIf="stockPriceList.length > 0" class="table border overflow-auto p-2">
-                                <thead>
-                                    <th>Stock Exchange</th>
-                                    <th>Stock Price</th>
-                                </thead>
-                                <tbody *ngFor="let stock of stockPriceList">
-                                    <td>{{stock.stockExchangeCode}}</td>
-                                    <td>{{stock.stockPrice}}</td>
-                                </tbody>
-                            </table>
-                        </div>
-                    <!-- </div> -->
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="activeModal.close()">Close</button>
-                <button type="button" class="btn btn-primary" (click)="onSubmit()">Submit</button>
-            </div>
-        <!-- </div>
-    </div> -->
-<!-- </div> -->
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal"
+            (click)="activeModal.close()">Close</button>
+        <button type="button" class="btn btn-primary" (click)="onSubmit()">Submit</button>
+    </div>
+</div>

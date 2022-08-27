@@ -15,6 +15,7 @@ export class SearchCompanyComponent implements OnInit {
   public defaultColDef: any;
   public rowData: any = [];
   public error: string = '';
+  loader: boolean = false;
   constructor(private companyService: CompanyService
     , private modalService: NgbModal
   ) { }
@@ -25,12 +26,15 @@ export class SearchCompanyComponent implements OnInit {
   }
 
   private getAllCompanies() {
+
     this.companyService.getAllCompany().subscribe((data: any) => {
+
       this.rowData = data;
     },
       (responseError) => {
+        this.loader = false;
         if (responseError.status == 204) {
-          this.error = responseError.error.message;
+          this.rowData = [];
         }
         else {
           this.error = "System is currently unavailable Please try again later";
@@ -43,8 +47,8 @@ export class SearchCompanyComponent implements OnInit {
       { headerName: 'Company Code', field: 'code' },
       { headerName: 'Company Name', field: 'name' },
       { headerName: 'CEO', field: 'ceo' },
-      { headerName: 'Stock Exchange', valueGetter: (params: any) => { return params.data.stockPrice[0].stockExchange.code } },
-      { headerName: "Last Trade Price", valueGetter: (params: any) => { return params.data.stockPrice[0].stockPrice } },
+      // { headerName: 'Stock Exchange', valueGetter: (params: any) => { return params.data.stockPrice[0].stockExchange.code } },
+      // { headerName: "Last Trade Price", valueGetter: (params: any) => { return params.data.stockPrice[0].stockPrice } },
       { headerName: "Action", cellRenderer: CellLinkComponent }
     ];
     this.defaultColDef = {
@@ -67,9 +71,7 @@ export class SearchCompanyComponent implements OnInit {
         this.rowData = data;
       },
         (responseError) => {
-
           if (responseError.status == 204) {
-            this.error = responseError.error.message;
             this.rowData = [];
           }
           else {
@@ -82,10 +84,7 @@ export class SearchCompanyComponent implements OnInit {
   addCompany() {
     const modalRef = this.modalService.open(AddCompanyComponent, { windowClass: "modal-lg-class", centered: true });
     modalRef.result.then(res => {
-      setTimeout(() => {
-        this.getAllCompanies()
-      }, 5000);
-
+      this.getAllCompanies()
     })
   }
 }

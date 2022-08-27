@@ -21,7 +21,6 @@ export class SignupComponent implements OnInit {
     this.signupForm = new FormGroup({
       userName: new FormControl(null, [Validators.required, Validators.minLength(3)]),
       email: new FormControl(null, [Validators.required, Validators.email
-        // ,Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$')
       ]),
       mobileNumber: new FormControl(null, [Validators.required, Validators.pattern('^[0-9+]*')]),
       password: new FormControl(null, [Validators.required, Validators.minLength(6)]),
@@ -37,7 +36,6 @@ export class SignupComponent implements OnInit {
 
   onSubmit() {
     this.user = this.signupForm.value;
-    console.log(this.user)
     this.loader = true;
     this.authenticationService.addUser(this.user).subscribe((data: any) => {
       this.loader = false;
