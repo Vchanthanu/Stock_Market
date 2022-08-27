@@ -24,6 +24,7 @@ export class DetailCompanyComponent implements OnInit {
   public stockPriceData: any;
   public noRowsTemplate: any;
   loader: boolean = false;
+  show: boolean = false;
   constructor(private router: Router, private companyService: CompanyService, private stockService: StockPriceService, private pipe: DatePipe) { }
 
   ngOnInit(): void {
@@ -139,8 +140,8 @@ export class DetailCompanyComponent implements OnInit {
     }, (error: any) => {
       this.loader = false;
       if (error.status == 204) {
-        this.noRowsTemplate =
-          `"<span">no rows to show</span>"`;
+        this.show = true;
+        this.rowData = [];
       }
       this.errorMsg = error.message;
     })

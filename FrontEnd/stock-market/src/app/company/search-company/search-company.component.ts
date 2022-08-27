@@ -47,8 +47,6 @@ export class SearchCompanyComponent implements OnInit {
       { headerName: 'Company Code', field: 'code' },
       { headerName: 'Company Name', field: 'name' },
       { headerName: 'CEO', field: 'ceo' },
-      // { headerName: 'Stock Exchange', valueGetter: (params: any) => { return params.data.stockPrice[0].stockExchange.code } },
-      // { headerName: "Last Trade Price", valueGetter: (params: any) => { return params.data.stockPrice[0].stockPrice } },
       { headerName: "Action", cellRenderer: CellLinkComponent }
     ];
     this.defaultColDef = {
