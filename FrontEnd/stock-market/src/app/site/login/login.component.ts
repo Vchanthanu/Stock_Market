@@ -13,7 +13,6 @@ export class LoginComponent implements OnInit {
 
   loginForm: any;
   error: String = '';
-  loader: boolean = false;
   constructor(private formbuilder: FormBuilder, private router: Router, private authenticationService: AuthenticationService, private userAuthService: UserAuthService) {
 
   }
@@ -34,9 +33,7 @@ export class LoginComponent implements OnInit {
 
   login() {
     if (this.loginForm.valid) {
-      this.loader = true;
       this.authenticationService.authenticate(this.emailId.value, this.password.value).subscribe((data: any) => {
-        this.loader = false;
         if (data.status == "true") {
           this.userAuthService.setUser(data.user);
           this.authenticationService.setToken(data.token);

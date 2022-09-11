@@ -24,3 +24,13 @@ body {
     margin-right: auto;
     width: 50%;
   }
+  .loader{
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: url("https://c.tenor.com/0iK9a1WkT40AAAAM/loading-white.gif") 
+                50% 50% no-repeat rgb(249,249,249);
+  }

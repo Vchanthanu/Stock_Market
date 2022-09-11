@@ -13,7 +13,6 @@ export class SignupComponent implements OnInit {
   signupForm: any;
   user!: User;
   error: string = '';
-  loader: boolean = false;
   constructor(private authenticationService: AuthenticationService, private router: Router) {
   }
 
@@ -36,9 +35,7 @@ export class SignupComponent implements OnInit {
 
   onSubmit() {
     this.user = this.signupForm.value;
-    this.loader = true;
     this.authenticationService.addUser(this.user).subscribe((data: any) => {
-      this.loader = false;
       if (data.status) {
         this.router.navigate(['login']);
       } else {
@@ -47,7 +44,6 @@ export class SignupComponent implements OnInit {
     },
       (responseError: any) => {
         this.error = responseError.error.message;
-        this.loader = false;
       }
     );
   }

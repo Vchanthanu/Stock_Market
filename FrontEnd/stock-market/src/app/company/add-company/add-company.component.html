@@ -1,6 +1,4 @@
-<div *ngIf="loader">
-    <img src="https://c.tenor.com/OzAxe6-8KvkAAAAj/blue_spinner.gif" class="center" style="width:50%">
-</div>
+<div class= loader *ngIf="loader"></div>
 <div *ngIf="!loader">
     <div class="modal-header">
         <h5 class="modal-title">Add Company</h5>
@@ -29,7 +27,7 @@
                             <input type="text" class="form-control" id="name" formControlName="name"
                                 placeholder="Enter Company Name">
                             <small *ngIf="(name.invalid && (name.touched || name.dirty) )&& name.errors.required"
-                                class="text-danger">Name is required.</small>
+                                class="text-danger">Company Name is required.</small>
                         </div>
                     </div>
                 </div>
@@ -74,17 +72,18 @@
             </div>
         </form>
         <div class="border border-1 col-sm-12">
-            <form [formGroup]="stockPriceForm">
+            <form [formGroup]="stockPriceForm" *ngIf="stockExchangeList!=''">
                 <div class="form-row pt-2">
                     <div class="form-group col-sm-5">
                         <div class="row ">
-                            <label class="col-sm-4" for="stockExchangeCode">Stock Exchange <span
+                            <label class="col-sm-5" for="stockExchangeCode">Stock Exchange <span
                                     class="text-danger">*</span></label>
-                            <div class="col-sm-8">
+                            <div class="col-sm-7">
                                 <select type="text" class=" form-control" id="stockExchangeCode"
                                     formControlName="stockExchangeCode">
+                                   
                                     <option value="null">---Select---</option>
-                                    <option *ngFor="let ex of stockExchangeList" [value]="ex?.code">
+                                    <option  *ngFor="let ex of stockExchangeList" [value]="ex?.code">
                                         {{ex?.name}}
                                     </option>
                                 </select>
@@ -129,6 +128,7 @@
                 </table>
             </div>
         </div>
+        <div class="text-danger text-center" *ngIf="errorMsg != ''">{{errorMsg}}</div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal"

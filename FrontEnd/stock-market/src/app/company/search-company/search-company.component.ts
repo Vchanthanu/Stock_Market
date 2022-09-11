@@ -26,10 +26,13 @@ export class SearchCompanyComponent implements OnInit {
   }
 
   private getAllCompanies() {
-
+    this.loader = true;
     this.companyService.getAllCompany().subscribe((data: any) => {
-
-      this.rowData = data;
+      this.loader = false;
+      if (data != null)
+        this.rowData = data;
+      else
+        this.rowData = [];
     },
       (responseError) => {
         this.loader = false;
@@ -54,7 +57,7 @@ export class SearchCompanyComponent implements OnInit {
     };
   }
   onGridReady(params: any) {
-    params.api.sizeColumnsToFit();
+    // params.api.sizeColumnsToFit();
   }
   onMouseOver(params: any) {
     sessionStorage.setItem("companyCode", JSON.stringify(params.data.code));
@@ -82,7 +85,7 @@ export class SearchCompanyComponent implements OnInit {
   addCompany() {
     const modalRef = this.modalService.open(AddCompanyComponent, { windowClass: "modal-lg-class", centered: true });
     modalRef.result.then(res => {
-      this.getAllCompanies()
+      this.getAllCompanies();
     })
   }
 }

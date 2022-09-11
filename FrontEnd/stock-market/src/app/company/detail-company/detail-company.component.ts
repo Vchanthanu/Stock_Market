@@ -1,7 +1,8 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { dateValidator } from 'src/app/model/date-validator';
 import { CompanyService } from 'src/app/service/company.service';
 import { StockPriceService } from 'src/app/service/stock-price.service';
 
@@ -17,7 +18,7 @@ export class DetailCompanyComponent implements OnInit {
   public defaultColDef: any;
   public rowData: any = [];
   stockPriceForm: any;
-  stockExchangeList: any;
+  stockExchangeList: any = [];
   errorMsg = '';
   stockPriceList: any = [];
   isAdded: boolean = false;
@@ -25,7 +26,7 @@ export class DetailCompanyComponent implements OnInit {
   public noRowsTemplate: any;
   loader: boolean = false;
   show: boolean = false;
-  constructor(private router: Router, private companyService: CompanyService, private stockService: StockPriceService, private pipe: DatePipe) { }
+  constructor(private fb: FormBuilder, private router: Router, private companyService: CompanyService, private stockService: StockPriceService, private pipe: DatePipe) { }
 
   ngOnInit(): void {
     this.declareForm();
@@ -36,9 +37,7 @@ export class DetailCompanyComponent implements OnInit {
 
   getCompanyDetail() {
     let sessionCod: any = sessionStorage.getItem("companyCode");
-    this.loader = true;
     this.companyService.getCompanyByCode(JSON.parse(sessionCod)).subscribe((data: any) => {
-      this.loader = false;
       this.company = data;
       let companyExchangeList = data.stockPrice.map((sp: any) => sp.stockExchange.code);
       this.stockExchangeList.filter((ex: any) => companyExchangeList.includes(ex.code));
@@ -54,31 +53,27 @@ export class DetailCompanyComponent implements OnInit {
   declareForm() {
     this.stockPriceForm = new FormGroup({
       stockExchangeCode: new FormControl(null, Validators.required),
-      stockPrice: new FormControl(null, Validators.required)
+      stockPrice: new FormControl(null, [Validators.required, Validators.pattern('^-?[0-9]\\d*(\\.\\d*)?$')])
     });
-    this.viewStockPriceForm = new FormGroup({
-      startDate: new FormControl(null, Validators.required),
-      endDate: new FormControl(null, Validators.required),
-      stockExchangeCde: new FormControl(null, Validators.required)
 
-    });
+    this.viewStockPriceForm = this.fb.group({
+      startDate: ['', [
+        Validators.required
+      ]],
+      endDate: ['', [
+        Validators.required
+      ]],
+      stockExchangeCde: ['', [
+        Validators.required
+      ]],
+    }, { validator: dateValidator('startDate', 'endDate') });
   }
 
   get stockExchangeCode() { return this.stockPriceForm.get('stockExchangeCode'); }
   get stockPrice() { return this.stockPriceForm.get('stockPrice'); }
-
   get startDate() { return this.viewStockPriceForm.get('startDate'); }
   get endDate() { return this.viewStockPriceForm.get('endDate'); }
   get stockExchangeCde() { return this.viewStockPriceForm.get('stockExchangeCde'); }
-
-  // getCompanyStockPrice(req?: any) {
-  //   if (req == null) {
-  //     req = { code: this.company.code }
-  //   }
-  //   this.stockService.getStockPrice(req).subscribe((data: any) => {
-  //     this.stockPriceList = data
-  //   });
-  // }
 
   onAddStockPrice() {
     this.errorMsg = "";
@@ -94,11 +89,11 @@ export class DetailCompanyComponent implements OnInit {
       this.loader = true;
       this.stockService.addStockPrice(req).subscribe((data: any) => {
         setTimeout(() => {
-          this.loader = false;
-        }, 5000);
+          this.getCompanyDetail();
+        }, 300);
+        this.loader = false;
         this.isAdded = true;
         this.stockPriceForm.reset();
-        this.getCompanyDetail();
         this.isAdded = false;
       })
 
@@ -124,36 +119,38 @@ export class DetailCompanyComponent implements OnInit {
   deleteCompany() {
     this.loader = true;
     this.companyService.deleteCompany(this.company.code).subscribe((data: any) => {
-      this.loader = false;
-      this.router.navigate(['company']);
+      setTimeout(() => {
+        this.router.navigate(['company']);
+      }, 300);
+
+
     }, (error: any) => {
-      this.loader = false;
       this.errorMsg = error.message;
     })
   }
   getStockPriceBasedOnDate() {
-    this.loader = true;
     this.stockService.getStockPriceBasedOnDate(this.getDateString(this.viewStockPriceForm.get('startDate').value), this.getDateString(this.viewStockPriceForm.get('endDate').value), this.viewStockPriceForm.get('stockExchangeCde').value, this.company.code).subscribe((data: any) => {
-      this.loader = false;
       this.stockPriceData = data;
-      this.rowData = data.priceList;
+      if (data != null && data.priceList != null)
+        this.rowData = data.priceList;
+      else {
+        this.rowData = [];
+        this.show = true;
+      }
     }, (error: any) => {
-      this.loader = false;
       if (error.status == 204) {
         this.show = true;
         this.rowData = [];
       }
       this.errorMsg = error.message;
     })
-
-
   }
   getDateString(date: any) {
-    console.log("date" + date);
     let formattedDate = this.pipe.transform(date, 'yyyy-MM-dd');
     if (formattedDate != undefined) {
       return formattedDate.toString();
     }
     return null;
   }
+
 }

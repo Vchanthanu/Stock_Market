@@ -3,12 +3,12 @@ package com.stockmarket.company.serviceImpl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -112,7 +112,7 @@ public class CompanyServiceImpl implements CompanyService {
 	public List<CompanyDetails> getAllCompanies() {
 		try {
 			logger.info("Inside getAllCompanies method in CompanyServiceImpl");
-			List<CompanyDetails> companies = mongoCompanyRepository.findAll();
+			List<CompanyDetails> companies = mongoCompanyRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
 			if (!companies.isEmpty()) {
 				List<StockExchange> stockExchangeList = mongoStockExchangeRepository.findAll();
 				companies.stream().forEach(company -> {

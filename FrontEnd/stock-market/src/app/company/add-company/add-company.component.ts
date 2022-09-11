@@ -37,13 +37,13 @@ export class AddCompanyComponent implements OnInit {
       code: new FormControl(null, Validators.required),
       name: new FormControl(null, Validators.required),
       ceo: new FormControl(null, Validators.required),
-      turnover: new FormControl(null, [Validators.required, Validators.pattern('^[0-9+]*')]),
+      turnover: new FormControl(null, [Validators.required, Validators.pattern('^-?[0-9]\\d*(\\.\\d*)?$')]),
       website: new FormControl(null, Validators.required),
     });
 
     this.stockPriceForm = new FormGroup({
       stockExchangeCode: new FormControl(null, Validators.required),
-      stockPrice: new FormControl(null, [Validators.required, Validators.pattern('^[0-9+]*')])
+      stockPrice: new FormControl(null, [Validators.required, Validators.pattern('^-?[0-9]\\d*(\\.\\d*)?$')])
     });
   }
 
@@ -59,6 +59,11 @@ export class AddCompanyComponent implements OnInit {
     this.errorMsg = "";
     if (this.stockPriceForm.valid) {
       this.stockPriceList.push(this.stockPriceForm.value);
+      this.stockExchangeList.forEach((value: any, index: any) => {
+        if (value.code == this.stockPriceForm.get('stockExchangeCode').value) {
+          this.stockExchangeList.splice(index, 1);
+        }
+      });
       this.stockPriceForm.reset();
     } else {
       this.errorMsg = "Stock Exchange and Stock Price are required";
@@ -82,25 +87,17 @@ export class AddCompanyComponent implements OnInit {
           });
       });
       req.stockPrice = reqStockPriceList;
-      // this.loader = true;
       this.companyService.registerCompany(req).subscribe((data: any) => {
+        this.loader = true;
         setTimeout(() => {
-          this.loader = false;
-        }, 40000);
-        this.activeModal.close();
-      }, (error: any) => {
-        this.loader = false;
-        if (error.status == 500) {
-          this.errorMsg = "System is currently unavailable Please try again later.";
-        }
-        else if (error.status == 400) {
-          this.errorMsg = "Company Code already exists.";
-        }
-        else
-          this.errorMsg = error.message;
-      })
-    } else {
-      this.errorMsg = "All fields are required"
+          this.activeModal.close();
+        }, 300);
+
+      }
+      )
+    }
+    else {
+      this.errorMsg = "Please fill mandatory fields"
     }
   }
 }

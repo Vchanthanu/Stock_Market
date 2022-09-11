@@ -43,7 +43,6 @@ export class StockPriceService {
     return this.http.get(this.getStockPriceByCompanyCodeUrl + req.code, httpOptions)
   }
   getStockPriceBasedOnDate(startDate: any, endDate: any, stockExchangeCode: string, companyCode: string) {
-    console.log("inside get getStockPriceBasedOnDate");
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',

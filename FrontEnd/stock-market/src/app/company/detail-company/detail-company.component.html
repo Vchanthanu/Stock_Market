@@ -1,10 +1,10 @@
-<div *ngIf="loader">
-    <img src="https://c.tenor.com/0iK9a1WkT40AAAAM/loading-white.gif" class="center" style="width:50%">
-</div>
-<div class="container align-center">
-     <span class="glyphicon glyphicon-arrow-left" routerLink="/company"></span>
-    <div class="container  border border-5 border-dark m-2  py-3">
-        <h2 class="text-center">{{company?.name}}</h2>
+<div class=loader *ngIf="loader"></div>
+<span>
+    <i class="fas fa-arrow-left ml-2" routerLink="/company"> Previous</i>
+    <h2 class="text-center">{{company?.name}}</h2>
+</span>
+<div class="jumbotron align-center">
+    <div class="container border border-3 border-dark py-3 m-auto">
         <div class="row">
             <div class="col-sm-6  mt-2">
                 <div class="row">
@@ -12,19 +12,19 @@
                     <div class="col-sm-6 ">{{company?.code}}</div>
                 </div>
             </div>
-            <div class="col-sm-6 mt-2 ">
+            <div class="col-sm-6 mt-2">
                 <div class="row">
                     <div class="col-sm-6 font-weight-bold">CEO Name : </div>
                     <div class="col-sm-6">{{company?.ceo}}</div>
                 </div>
             </div>
-            <div class="col-sm-6 ">
+            <div class="col-sm-6">
                 <div class="row">
                     <div class="col-sm-6 font-weight-bold">Turnover : </div>
                     <div class="col-sm-6">{{company?.turnover}}</div>
                 </div>
             </div>
-            <div class="col-sm-6 ">
+            <div class="col-sm-6">
                 <div class="row">
                     <div class="col-sm-6 font-weight-bold">Website : </div>
                     <div class="col-sm-6">{{company?.website}}</div>
@@ -51,7 +51,7 @@
             </table>
 
         </div>
-        <div class="row mt-3">
+        <div class="row mt-2">
             <div class="col-sm-12 text-center">
                 <button type="button" class="btn-btn-dark" data-toggle="modal" data-target="#exampleModalCenter">
                     Add Stock Price
@@ -88,14 +88,13 @@
                                     </select>
                                     <small
                                         *ngIf="(stockExchangeCode.invalid && (stockExchangeCode.touched || stockExchangeCode.dirty) )&& stockExchangeCode.errors.required"
-                                        class="text-danger">Stock Exchange Code required.</small>
+                                        class="text-danger">Stock Exchange is required.</small>
                                 </div>
 
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group col-sm-12 col-md-12 col-lg-12">
-
                                 <label class="col-sm-4" for="stockPrice">Stock Price <span
                                         class="text-danger">*</span></label>
                                 <div class="col-sm-8">
@@ -104,6 +103,9 @@
                                     <small
                                         *ngIf="(stockPrice.invalid && (stockPrice.touched || stockPrice.dirty) )&& stockPrice.errors.required"
                                         class="text-danger">Stock Price is required.</small>
+                                    <small *ngIf=" !stockPrice.errors?.required&&stockPrice.errors?.pattern"
+                                        class="text-danger">StockPrice should be number
+                                    </small>
                                 </div>
                             </div>
                         </div>
@@ -118,9 +120,9 @@
         </div>
     </div>
 
-    <div class="container align-center">
+    <div class="container  align-center">
         <form [formGroup]="viewStockPriceForm">
-            <div class="form-row mt-3">
+            <div class="form-row  mt-3">
                 <div class="form-group col-sm-12 col-md-3 col-lg-3">
 
                     <input placeholder="From Date" class="form-control" id="startDate" formControlName="startDate"
@@ -134,6 +136,9 @@
                         onfocus="(this.type='date')">
                     <small *ngIf="(endDate.invalid && (endDate.touched || endDate.dirty) )&& endDate.errors.required"
                         class="text-danger">To Date is required.</small>
+                    <small class="text-danger" *ngIf="endDate.errors?.invalidDate">To Date should not be earlier
+                        than
+                        From Date</small>
                 </div>
                 <div class="form-group col-sm-12 col-md-3 col-lg-3">
 
@@ -154,10 +159,10 @@
         </form>
 
     </div>
-    <div class="container-fluid align-center mt-4">
-
+    <!-- <p> </p> -->
+    <div class="container align-center">
         <div class="form-group col-sm-12  col-lg-12" *ngIf="show||rowData.length>0">
-            <div class="row">
+            <div class="row mt-2">
                 <div class="col-sm-9">
                     <ag-grid-angular style="width:100% ;height: 300px" class="ag-theme-alpine" [columnDefs]="columnDefs"
                         [defaultColDef]="defaultColDef" [rowData]="rowData" [pagination]=true [paginationPageSize]="20"
@@ -171,6 +176,6 @@
                 </div>
             </div>
         </div>
-        <button type="button" class="btn btn-outline-dark" routerLink="/company">Previous</button>
     </div>
-</div>
+
+    <!-- </div> -->
