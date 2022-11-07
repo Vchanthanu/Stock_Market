@@ -1,4 +1,5 @@
 import { DatePipe } from '@angular/common';
+import { ThrowStmt } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -117,13 +118,10 @@ export class DetailCompanyComponent implements OnInit {
   }
 
   deleteCompany() {
-    this.loader = true;
     this.companyService.deleteCompany(this.company.code).subscribe((data: any) => {
       setTimeout(() => {
         this.router.navigate(['company']);
       }, 300);
-
-
     }, (error: any) => {
       this.errorMsg = error.message;
     })

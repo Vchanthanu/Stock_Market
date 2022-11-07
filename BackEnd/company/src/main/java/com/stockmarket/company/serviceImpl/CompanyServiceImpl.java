@@ -105,7 +105,12 @@ public class CompanyServiceImpl implements CompanyService {
 		});
 		companyDetails.setStockPrice(stockPriceList);
 		logger.info("message to topic" + companyDetails.toString());
-		kafkaTemplate.send("stockmarket", companyDetails);
+		try {
+			kafkaTemplate.send("stockmarket", companyDetails);
+		} catch (Exception ex) {
+			logger.error("Exception while posting company data to topic -stockmarket", ex.getMessage());
+			deleteCompany(company.getCode());
+		}
 	}
 
 	@Override

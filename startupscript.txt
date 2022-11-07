@@ -1,0 +1,25 @@
+Content-Type: multipart/mixed; boundary="//"
+MIME-Version: 1.0
+
+--//
+Content-Type: text/cloud-config; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename="cloud-config.txt"
+
+#cloud-config
+cloud_final_modules:
+- [scripts-user, always]
+
+--//
+Content-Type: text/x-shellscript; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename="userdata.txt"
+
+#!/bin/bash
+export KAFKA_HEAP_OPTS="-Xmx256M -Xms128M"
+nohup sh /home/ec2-user/kafka_2.12-2.4.1/bin/zookeeper-server-start.sh /home/ec2-user/kafka_2.12-2.4.1/config/zookeeper.properties &
+sleep 5
+nohup sh /home/ec2-user/kafka_2.12-2.4.1/bin/kafka-server-start.sh /home/ec2-user/kafka_2.12-2.4.1/config/server.properties &
+--//--

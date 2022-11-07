@@ -1,17 +1,59 @@
 version: '3'
 services:
+  authentication-service:
+    image: authentication-app
+    build: BackEnd/authentication-service/.
+    ports:
+      - 8070:8092
+    depends_on:
+      - eureka
+    links:
+      - eureka
+  eureka:
+    image: eureka-app
+    build: BackEnd/eureka/.
+    ports:
+      - 8071:8093
+  api-gateway:
+    image: api-gateway-app
+    build: BackEnd/api-gateway/.
+    ports:
+      - 8072:8085
+    links:
+      - company
+      - stockprice
+      - authentication-service
   company:
-    image: company
-    build: BackEnd/company.
+    image: company-app
+    build: BackEnd/company/.
     ports:
-        - 8090:8090
-  
-  stock_price:
-    image: stock_price
-    build: BackEnd/stockprice.
+      - 8073:8090
+    depends_on:
+      - eureka
+    links:
+      - eureka
+  stockprice:
+    image: stockprice-app
+    build: BackEnd/stockprice/.
     ports:
-        - 8091:8091
-        
-  
-
-  
+      - 8074:8091
+    depends_on:
+     - eureka
+    links:
+      - eureka
+  kafka-consumer-component:
+    image: kafka-consumer-app
+    build: BackEnd/kafka-consumer-component/.
+    ports:
+      - 8075:8095
+    depends_on:
+      - eureka
+    links:
+     - eureka
+  stock-market-ui:
+    image: angular-app
+    build: FrontEnd/stock-market/.
+    ports:
+      - 3000:80
+    links:
+     - api-gateway
