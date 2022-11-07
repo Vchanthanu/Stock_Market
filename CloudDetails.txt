@@ -1,0 +1,47 @@
+AKIATFBV7SVBYZFAIG24
+6DPnJt1V701HpngDaVISwvsrUm7BAXvh69NGcvav
+
+ECR 217009067331.dkr.ecr.ap-south-1.amazonaws.com/stockmarket
+
+login to AWS ECR:
+aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 217009067331.dkr.ecr.ap-south-1.amazonaws.com
+tag image:
+docker tag angular-app:latest 217009067331.dkr.ecr.ap-south-1.amazonaws.com/stockmarket-registry:latest
+Push to ECR:
+docker push 217009067331.dkr.ecr.ap-south-1.amazonaws.com/stockmarket-registry:latest
+
+ECR repo:
+
+Images:
+1.eureka:
+217009067331.dkr.ecr.ap-south-1.amazonaws.com/stockmarket-registry:eureka-0.0.1-SNAPSHOT
+2.company:
+217009067331.dkr.ecr.ap-south-1.amazonaws.com/stockmarket-registry:company-0.0.1-SNAPSHOT
+3.authentication-service:
+217009067331.dkr.ecr.ap-south-1.amazonaws.com/stockmarket-registry:authentication-service-0.0.1-SNAPSHOT
+4.stockprice:
+217009067331.dkr.ecr.ap-south-1.amazonaws.com/stockmarket-registry: stockprice-0.0.2-SNAPSHOT
+5.kafka-consumer:
+217009067331.dkr.ecr.ap-south-1.amazonaws.com/stockmarket-registry:kafka-consumer-component-0.0.1-SNAPSHOT
+6.api-gateway:
+217009067331.dkr.ecr.ap-south-1.amazonaws.com/stockmarket-registry:api-gateway-0.0.1-SNAPSHOT
+
+
+
+
+
+
+
+Service Urls:
+Eureka=>http://ec2-3-7-73-174.ap-south-1.compute.amazonaws.com:8093/
+company => http://13.232.205.86:8090/
+stockprice http://43.205.239.229:8091/
+authentication-service http://13.233.32.35:8092/
+kafka-consumer http://13.126.43.196:8095/
+api-gateway=> http://13.234.35.185:8085
+
+
+UI http://ec2-13-233-43-213.ap-south-1.compute.amazonaws.com/
+
+
+

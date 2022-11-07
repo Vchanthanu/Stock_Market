@@ -3,6 +3,10 @@ STOCK MARKET
 PROBLEM STATEMENT:
 E-StockMarket Application is a Restful Microservice application, where it allows users to manage the stocks like create, view stock price details and company details.
 
+Angular application:
+
+URL:  http://ec2-13-233-43-213.ap-south-1.compute.amazonaws.com/
+
 Microservices Used:
 Company
 Stockprice 
@@ -12,7 +16,7 @@ eureka
 Kafka consumer Component
 
 Database Used:
-My SQL 
+My SQL AWS RDS sql
 MongoDB we are using cloud db from mongo db atlas
 
 Micro service Descriptions:
@@ -25,8 +29,8 @@ Apis exposed ::
 /api/v1.0/market/company /get/{companyCode}
 
 Swagger url:: 
-http://localhost: 8085/company/swagger-ui.html (through api gateway)
-http://localhost: 8090/company/swagger-ui.html (Direct company service call)
+
+http://13.232.205.86:8090/company/swagger-ui.html 
 
 
 2.Stockprice:
@@ -35,8 +39,8 @@ API’s exposed ::
 /api/v1.0/market/stock /add
 /api/v1.0/market/stock /get/stockExchange
 /api/v1.0/market/stock /get/{companyCode}
-http://localhost:8085/stockprice/swagger-ui.html (through api gateway)
-http://localhost:8091/stockprice/swagger-ui.html (Direct stockprice service call)
+
+http://43.205.239.229:8091/stockprice/swagger-ui.html 
 
 3.Authentication:
    Authentication Service is used for user creation and token generation for valid users. Token will be used by the services to validate the user
@@ -44,23 +48,32 @@ API’s Exposed::
 /api/v1.0/market/authentication/user/ signup
 /api/v1.0/market/authentication/user/login
 Swagger url ::
-http://localhost:8085/ authentication-service/swagger-ui.html (through api gateway)
-http://localhost: 8092/authentication-service/swagger-ui.html (Direct authentication-service call)
+http://13.233.32.35:8092/authentication-service/swagger-ui.html 
 
 
 4.Api gateway:
     Api gateway act as the entry point to all our services. All incoming request will be routed to corresponding microservices.
+service url :http://13.234.35.185:8085
 
 5.Eureka:
   Eureka server holds the information on the connected microservices. 
-Eureka endpoint :: http://localhost:8761/
+Eureka endpoint :: http://3.7.73.174:8093/
 
 6.Kafka consumer Component:
   Kafka consumer component will consume the messages published from stockprice service and company service and insert the data into mongodb. Which will then be used by the UI.
 The company details are published to kafka from the company service and stock price details are published to kafka from the stock price service
 Kafka Topic:  stockmarket
 
-Note : Attached sql script and refer sql data script file to insert  pre defined  stock exchange data into stock_exchange table in db 
+
+AWS Cloud:
+Used EC2 instance to run kafka
+Used RDS sql for my Sql db
+Used Elastic Container Registry to store the images in the repo
+Used Elastic Container service to run all the applications by pulling the images from ECR
+
+Note Used Mongo db atlas for mongo db
+
+
 
 
  
